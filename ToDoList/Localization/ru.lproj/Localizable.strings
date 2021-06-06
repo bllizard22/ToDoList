@@ -1,0 +1,9 @@
+/* debug */
+"debug print" = "отладочный принт";
+
+/* Build on About screen */
+"Build" = "Сборка";
+
+/* Version on About screen */
+"Version" = "Версия";
+

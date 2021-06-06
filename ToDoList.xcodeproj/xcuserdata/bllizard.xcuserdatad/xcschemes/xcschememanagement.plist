@@ -7,7 +7,30 @@
 		<key>ToDoList.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>4</integer>
+		</dict>
+		<key>ToDoList_RU.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>8552D413266CC48300C38589</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8552D429266CC49500C38589</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8552D434266CC49500C38589</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
