@@ -29,19 +29,39 @@
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="22"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pKr-fZ-bpo">
+                                <rect key="frame" x="191.5" y="655" width="31" height="30"/>
+                                <state key="normal" title="read"/>
+                                <connections>
+                                    <action selector="readButtonDidTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pnh-6b-d0g"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qe0-c5-Cij">
+                                <rect key="frame" x="190" y="707" width="34" height="30"/>
+                                <state key="normal" title="write"/>
+                                <connections>
+                                    <action selector="writeButtonDidTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gUF-Wy-Waw"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="pKr-fZ-bpo" firstAttribute="top" secondItem="3QY-Mz-Uub" secondAttribute="bottom" constant="22.5" id="9KA-q2-0iq"/>
                             <constraint firstItem="3QY-Mz-Uub" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="CrW-ci-Nq9"/>
                             <constraint firstItem="3QY-Mz-Uub" firstAttribute="top" secondItem="144-wn-OzT" secondAttribute="bottom" constant="98" id="YRw-qm-wUf"/>
                             <constraint firstItem="144-wn-OzT" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="afj-Er-IA0"/>
+                            <constraint firstItem="Qe0-c5-Cij" firstAttribute="centerX" secondItem="pKr-fZ-bpo" secondAttribute="centerX" id="hJO-lm-OeF"/>
+                            <constraint firstItem="pKr-fZ-bpo" firstAttribute="centerX" secondItem="3QY-Mz-Uub" secondAttribute="centerX" id="jHU-Y7-B3B"/>
                             <constraint firstItem="144-wn-OzT" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-40" id="oj6-DG-eF3"/>
+                            <constraint firstItem="Qe0-c5-Cij" firstAttribute="top" secondItem="pKr-fZ-bpo" secondAttribute="bottom" constant="22" id="yA3-Mp-Wra"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="buildLabel" destination="3QY-Mz-Uub" id="QP7-AW-PC3"/>
                         <outlet property="iconImage" destination="144-wn-OzT" id="cv1-Mp-fyS"/>
+                        <outlet property="readButton" destination="pKr-fZ-bpo" id="FSt-eY-xZg"/>
+                        <outlet property="writeButton" destination="Qe0-c5-Cij" id="SO6-aa-obG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
