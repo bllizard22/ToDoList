@@ -8,10 +8,10 @@
 import Foundation
 
 struct TodoItem {
-    let id: String // = UUID().uuidString
+    let id: String
     let text: String
     let importance: Priority
-    let deadline: Double? // = nil
+    let deadline: Double?
     
     init(id: String = UUID().uuidString,
          text: String,

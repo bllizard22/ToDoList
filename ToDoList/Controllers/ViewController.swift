@@ -8,9 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-//    let buildModel = BuildVersionModel()
-//    let fileCache = FileCache()
+
     var buildModel: BuildVersionModel!
     var fileCache: FileCache!
 
@@ -26,10 +24,10 @@ class ViewController: UIViewController {
         buildModel = BuildVersionModel()
         fileCache = FileCache(forFile: "defaultList.txt")
 
-        let version = NSLocalizedString("Version", comment: "Version on About screen")
-        let build = NSLocalizedString("Build", comment: "Build on About screen")
-        buildLabel.text = version + " \(buildModel.versionNumber)\n" + build + " \(buildModel.buildNumber)"
-        print(NSLocalizedString("debug print", comment: "debug"))
+//        let version = NSLocalizedString("Version", comment: "Version on About screen")
+//        let build = NSLocalizedString("Build", comment: "Build on About screen")
+//        buildLabel.text = version + " \(buildModel.versionNumber)\n" + build + " \(buildModel.buildNumber)"
+//        print(NSLocalizedString("debug print", comment: "debug"))
 
     }
 
@@ -38,35 +36,24 @@ class ViewController: UIViewController {
     }
     
     @IBAction func writeButtonDidTouched(_ sender: Any) {
+        createItems()
         fileCache.saveToFile()
     }
     
-    func createOneItem() {
+    // MARK: - create tasks for debug purposes
+    func createItems() {
 
         let item = TodoItem(text: "sell smth",
                             importance: .high,
                             deadline: Date().timeIntervalSince1970 + 3600*24*7)
-        print(item)
+        fileCache.addNewTask(task: item)
         
         let item2 = TodoItem(text: "buy smth", importance: .moderate)
-        print(item2)
+        fileCache.addNewTask(task: item2)
         
-//        try? FileManager.default.createDirectory(at: dirURL, withIntermediateDirectories:
-//        true, attributes: nil)
-//
-//        let fm = FileManager.default
-//        let path = Bundle.main.resourcePath!
-//
-//        let dir = NSTemporaryDirectory()
-//        do {
-//            let items = try fm.contentsOfDirectory(atPath: dir)
-//
-//            for item in items {
-//                print("Found \(item)")
-//            }
-//        } catch {
-//            // failed to read directory – bad permissions, perhaps?
-//        }
+        let item3 = TodoItem(text: "buy 3 smth", importance: .moderate)
+        fileCache.addNewTask(task: item3)
+        fileCache.removeTask(withId: item3.id)
         
     }
     
