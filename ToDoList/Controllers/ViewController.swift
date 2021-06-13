@@ -23,12 +23,7 @@ class ViewController: UIViewController {
         
         buildModel = BuildVersionModel()
         fileCache = FileCache(forFile: "defaultList.txt")
-
-//        let version = NSLocalizedString("Version", comment: "Version on About screen")
-//        let build = NSLocalizedString("Build", comment: "Build on About screen")
-//        buildLabel.text = version + " \(buildModel.versionNumber)\n" + build + " \(buildModel.buildNumber)"
-//        print(NSLocalizedString("debug print", comment: "debug"))
-
+        fileCache.loadFromFile()
     }
 
     @IBAction func readButtonDidTouched(_ sender: UIButton) {
@@ -36,8 +31,17 @@ class ViewController: UIViewController {
     }
     
     @IBAction func writeButtonDidTouched(_ sender: Any) {
-        createItems()
+//        createItems()
         fileCache.saveToFile()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "openTaskDetail" {
+//            let detailVCType = UINavigationController().topViewController
+            let destination = segue.destination as! UINavigationController
+            let topVC = destination.topViewController as! DetailViewController
+            topVC.fileCache = fileCache
+        }
     }
     
     // MARK: - create tasks for debug purposes

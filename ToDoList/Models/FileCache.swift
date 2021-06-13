@@ -52,7 +52,7 @@ class FileCache {
     }
     
     func loadFromFile() {
-
+        guard checkDirectory() != nil else { return }
         guard let filePath = cacheDir?.appendingPathComponent(fileName) else { return }
         
         do {

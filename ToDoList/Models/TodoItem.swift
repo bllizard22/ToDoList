@@ -22,12 +22,4 @@ struct TodoItem {
         self.importance = importance
         self.deadline = deadline
     }
-    
-    init(text: String,
-         importance: Priority) {
-        self.id = UUID().uuidString
-        self.text = text
-        self.importance = importance
-        self.deadline = nil
-    }
 }
