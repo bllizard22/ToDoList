@@ -1,3 +1,30 @@
 /* Class = "UILabel"; text = "Label"; ObjectID = "3QY-Mz-Uub"; */
-"3QY-Mz-Uub.text" = "Label";
+"3QY-Mz-Uub.text" = "Лэйбл";
+
+/* Class = "UIButton"; disabledTitle = "Delete"; ObjectID = "8cI-bW-BCz"; */
+"8cI-bW-BCz.disabledTitle" = "Удалить";
+
+/* Class = "UIButton"; normalTitle = "Delete"; ObjectID = "8cI-bW-BCz"; */
+"8cI-bW-BCz.normalTitle" = "Удалить";
+
+/* Class = "UISegmentedControl"; BWA-zz-nkh.segmentTitles[1] = "no"; ObjectID = "BWA-zz-nkh"; */
+"BWA-zz-nkh.segmentTitles[1]" = "нет";
+
+/* Class = "UILabel"; text = "Deadline"; ObjectID = "ebR-1c-9kk"; */
+"ebR-1c-9kk.text" = "Сделать до";
+
+/* Class = "UINavigationItem"; title = "Task"; ObjectID = "Ecp-tU-wq5"; */
+"Ecp-tU-wq5.title" = "Дело";
+
+/* Class = "UILabel"; text = "Importance"; ObjectID = "EiT-UY-ThI"; */
+"EiT-UY-ThI.text" = "Важность";
+
+/* Class = "UIButton"; normalTitle = "read"; ObjectID = "pKr-fZ-bpo"; */
+"pKr-fZ-bpo.normalTitle" = "открыть";
+
+/* Class = "UIButton"; normalTitle = "write"; ObjectID = "Qe0-c5-Cij"; */
+"Qe0-c5-Cij.normalTitle" = "записать";
+
+/* Class = "UIButton"; normalTitle = "Add Task"; ObjectID = "Qy9-Ut-G8A"; */
+"Qy9-Ut-G8A.normalTitle" = "Добавить дело";
 

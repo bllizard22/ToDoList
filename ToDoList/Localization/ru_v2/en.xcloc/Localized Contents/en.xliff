@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="ToDoList/en.lproj/InfoPlist.strings" source-language="en" target-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="12.4" build-num="12D4e"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" xml:space="preserve">
+        <source>ToDoList</source>
+        <target>ToDoList</target>
+        <note>Bundle name</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="ToDoList/Supproting Files/Base.lproj/Main.storyboard" source-language="en" target-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="12.4" build-num="12D4e"/>
+    </header>
+    <body>
+      <trans-unit id="3QY-Mz-Uub.text" xml:space="preserve">
+        <source>Label</source>
+        <target>Label</target>
+        <note>Class = "UILabel"; text = "Label"; ObjectID = "3QY-Mz-Uub";</note>
+      </trans-unit>
+      <trans-unit id="8cI-bW-BCz.disabledTitle" xml:space="preserve">
+        <source>Delete</source>
+        <target>Delete</target>
+        <note>Class = "UIButton"; disabledTitle = "Delete"; ObjectID = "8cI-bW-BCz";</note>
+      </trans-unit>
+      <trans-unit id="8cI-bW-BCz.normalTitle" xml:space="preserve">
+        <source>Delete</source>
+        <target>Delete</target>
+        <note>Class = "UIButton"; normalTitle = "Delete"; ObjectID = "8cI-bW-BCz";</note>
+      </trans-unit>
+      <trans-unit id="BWA-zz-nkh.segmentTitles[0]" xml:space="preserve">
+        <source>↓</source>
+        <target>↓</target>
+        <note>Class = "UISegmentedControl"; BWA-zz-nkh.segmentTitles[0] = "↓"; ObjectID = "BWA-zz-nkh";</note>
+      </trans-unit>
+      <trans-unit id="BWA-zz-nkh.segmentTitles[1]" xml:space="preserve">
+        <source>no</source>
+        <target>no</target>
+        <note>Class = "UISegmentedControl"; BWA-zz-nkh.segmentTitles[1] = "no"; ObjectID = "BWA-zz-nkh";</note>
+      </trans-unit>
+      <trans-unit id="BWA-zz-nkh.segmentTitles[2]" xml:space="preserve">
+        <source>‼️</source>
+        <target>‼️</target>
+        <note>Class = "UISegmentedControl"; BWA-zz-nkh.segmentTitles[2] = "‼️"; ObjectID = "BWA-zz-nkh";</note>
+      </trans-unit>
+      <trans-unit id="Ecp-tU-wq5.title" xml:space="preserve">
+        <source>Task</source>
+        <target>Task</target>
+        <note>Class = "UINavigationItem"; title = "Task"; ObjectID = "Ecp-tU-wq5";</note>
+      </trans-unit>
+      <trans-unit id="EiT-UY-ThI.text" xml:space="preserve">
+        <source>Importance</source>
+        <target>Importance</target>
+        <note>Class = "UILabel"; text = "Importance"; ObjectID = "EiT-UY-ThI";</note>
+      </trans-unit>
+      <trans-unit id="Qe0-c5-Cij.normalTitle" xml:space="preserve">
+        <source>write</source>
+        <target>write</target>
+        <note>Class = "UIButton"; normalTitle = "write"; ObjectID = "Qe0-c5-Cij";</note>
+      </trans-unit>
+      <trans-unit id="Qy9-Ut-G8A.normalTitle" xml:space="preserve">
+        <source>Add Task</source>
+        <target>Add Task</target>
+        <note>Class = "UIButton"; normalTitle = "Add Task"; ObjectID = "Qy9-Ut-G8A";</note>
+      </trans-unit>
+      <trans-unit id="ebR-1c-9kk.text" xml:space="preserve">
+        <source>Deadline</source>
+        <target>Deadline</target>
+        <note>Class = "UILabel"; text = "Deadline"; ObjectID = "ebR-1c-9kk";</note>
+      </trans-unit>
+      <trans-unit id="pKr-fZ-bpo.normalTitle" xml:space="preserve">
+        <source>read</source>
+        <target>read</target>
+        <note>Class = "UIButton"; normalTitle = "read"; ObjectID = "pKr-fZ-bpo";</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

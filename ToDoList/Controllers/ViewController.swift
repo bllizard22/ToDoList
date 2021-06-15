@@ -38,8 +38,8 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "openTaskDetail" {
 //            let detailVCType = UINavigationController().topViewController
-            let destination = segue.destination as! UINavigationController
-            let topVC = destination.topViewController as! DetailViewController
+            guard let destination = segue.destination as? UINavigationController else { return }
+            guard let topVC = destination.topViewController as? DetailViewController else { return }
             topVC.fileCache = fileCache
         }
     }

@@ -218,7 +218,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="deadlineStack" destination="h5E-H4-9w1" id="wPQ-xZ-hTx"/>
-                        <outlet property="deadlineSwitch" destination="2co-8Y-DtZ" id="xRh-JY-L1w"/>
                         <outlet property="deleteButton" destination="8cI-bW-BCz" id="OQX-L3-mXs"/>
                         <outlet property="importanceSegmets" destination="BWA-zz-nkh" id="FQQ-9P-YfB"/>
                         <outlet property="settingsStack" destination="unG-So-3A9" id="y70-Yl-OJ9"/>
