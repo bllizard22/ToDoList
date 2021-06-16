@@ -7,12 +7,16 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, UITextViewDelegate {
 
     var fileCache: FileCache!
+    var currentItem: TodoItem!
+    var rootVC: ViewController!
+    
     var deadlinePicker: UIDatePicker!
     
-    @IBOutlet weak var textField: UITextView!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var settingsView: UIView!
     @IBOutlet weak var settingsStack: UIStackView!
     @IBOutlet weak var deleteButton: UIButton!
@@ -20,10 +24,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var deadlineStack: UIStackView!
     @IBOutlet weak var deadlineSwitch: UISwitch!
     
+    @IBOutlet weak var textViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var settingsViewHeightConstraint: NSLayoutConstraint!
-//    let small = settingsView.heightAnchor.constraint(equalToConstant: 112)
-//    let big = settingsView.heightAnchor.constraint(equalToConstant: 300)
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,30 +33,31 @@ class DetailViewController: UIViewController {
         setupVC()
     }
     
-    func setupVC() {
-        textField.layer.cornerRadius = 16
+    private func setupVC() {
+        textView.layer.cornerRadius = 16
         deleteButton.layer.cornerRadius = 16
+        deleteButton.setTitleColor(.red, for: .normal)
+        deleteButton.setTitleColor(.systemGray4, for: .disabled)
         settingsView.layer.cornerRadius = 16
         settingsView.translatesAutoresizingMaskIntoConstraints = false
         
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
+        rootVC = presentingViewController as? ViewController
+        textView.delegate = self
     }
 
     @IBAction func cancelAction(_ sender: UIBarButtonItem) {
-        guard let rootVC = presentingViewController as? ViewController else { return }
-        print(rootVC)
-        rootVC.fileCache = fileCache
         dismiss(animated: true, completion: nil)
     }
 
     @IBAction func saveTask(_ sender: UIBarButtonItem) {
-        
-        let text = textField.text
+        let text = textView.text
         
         var importance: Priority
-        switch importanceSegmets.numberOfSegments {
+        print("Current segment \(importanceSegmets.selectedSegmentIndex)")
+        switch importanceSegmets.selectedSegmentIndex {
         case 0:
             importance = .low
         case 2:
@@ -68,7 +71,13 @@ class DetailViewController: UIViewController {
         let item: TodoItem = TodoItem(text: text ?? "",
                                       importance: importance,
                                       deadline: deadline)
-        fileCache.addNewTask(task: item)
+        rootVC.fileCache.addNewTask(task: item)
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        saveButton.isEnabled = textView.text != nil && textView.text != ""
     }
     
     @IBAction func deadlineSwitchChanged(_ sender: UISwitch) {
@@ -83,13 +92,10 @@ class DetailViewController: UIViewController {
             
             settingsViewHeightConstraint.constant += deadlinePicker.frame.height + settingsStack.spacing
             settingsStack.addArrangedSubview(deadlinePicker)
-            
-//            settingsStack.spacing = 11
-            
+                        
             settingsView.setNeedsLayout()
         } else {
             settingsViewHeightConstraint.constant -= deadlinePicker.frame.height + settingsStack.spacing
-//            settingsStack.spacing = 11
             
             for view in settingsStack.subviews where view.tag == 5 {
                 view.removeFromSuperview()
@@ -102,5 +108,7 @@ class DetailViewController: UIViewController {
         if let id = fileCache.todoItems.first?.value.id {
             fileCache.removeTask(withId: id)
         }
+        guard let id = currentItem?.id else { return }
+        rootVC.fileCache.removeTask(withId: id)
     }
 }

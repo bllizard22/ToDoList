@@ -16,7 +16,6 @@ class IconImageView: UIImageView {
     }
     
     required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
         super.init(coder: coder)
         
         setupIconView()
@@ -24,6 +23,5 @@ class IconImageView: UIImageView {
     
     func setupIconView() {
         self.layer.cornerRadius = 30
-//        self.clipsToBounds = true
     }
 }
