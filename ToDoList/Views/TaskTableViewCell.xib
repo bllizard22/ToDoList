@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TasksTableView" customModule="ToDoList" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="taskCell" id="KGk-i7-Jjw" customClass="TaskTableViewCell" customModule="ToDoList" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="twa-5o-SnU">
+                        <rect key="frame" x="4" y="4" width="48" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="48" id="hap-BC-ux0"/>
+                        </constraints>
+                        <state key="normal" image="Ellipse"/>
+                    </button>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Lei-pJ-ewk">
+                        <rect key="frame" x="52" y="18" width="119" height="20.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy some fruits" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RVM-XV-kGh">
+                                <rect key="frame" x="0.0" y="0.0" width="119" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="twa-5o-SnU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="4" id="5Wg-bM-NTU"/>
+                    <constraint firstItem="Lei-pJ-ewk" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="JG0-OW-Na0"/>
+                    <constraint firstItem="twa-5o-SnU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="SPn-Z7-eVM"/>
+                    <constraint firstAttribute="bottom" secondItem="twa-5o-SnU" secondAttribute="bottom" constant="4" id="fEZ-3D-EdJ"/>
+                    <constraint firstItem="Lei-pJ-ewk" firstAttribute="leading" secondItem="twa-5o-SnU" secondAttribute="trailing" id="upt-TP-ClN"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" name="Background_Secondary"/>
+            <point key="canvasLocation" x="-197.10144927536234" y="145.98214285714286"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Ellipse" width="24" height="24"/>
+        <namedColor name="Background_Secondary">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

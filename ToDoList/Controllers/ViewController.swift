@@ -11,18 +11,21 @@ class ViewController: UIViewController {
 
     var buildModel: BuildVersionModel!
     var fileCache: FileCache!
-
-    @IBOutlet private weak var iconImage: UIImageView!
-    @IBOutlet private weak var buildLabel: UILabel!
-
-    @IBOutlet private weak var readButton: UIButton!
-    @IBOutlet private weak var writeButton: UIButton!
+    
+    @IBOutlet private weak var doneLabel: UILabel!
+    @IBOutlet weak var showDoneButton: UIButton!
+    @IBOutlet weak var taskTableView: UITableView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        taskTableView.delegate = self
+        taskTableView.dataSource = self
+        
         buildModel = BuildVersionModel()
         fileCache = FileCache(forFile: "defaultList.txt")
+        createItems()
         do {
             try fileCache.loadFromFile()
         } catch let error {
@@ -30,7 +33,7 @@ class ViewController: UIViewController {
         }
     }
 
-    @IBAction private func readButtonDidTouched(_ sender: UIButton) {
+    func readFile() {
         do {
             try fileCache.loadFromFile()
         } catch let error {
@@ -38,7 +41,7 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction private func writeButtonDidTouched(_ sender: Any) {
+    func writeFile() {
         do {
             try fileCache.saveToFile()
         } catch let error {
@@ -47,10 +50,10 @@ class ViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "openTaskDetail" {
+        if segue.identifier == "taskDetailSegue" {
             guard let destination = segue.destination as? UINavigationController else { return }
             guard let topVC = destination.topViewController as? DetailViewController else { return }
-            topVC.fileCache = fileCache
+            topVC.currentItem = fileCache.todoItems.values.first
         }
     }
     
@@ -59,7 +62,7 @@ class ViewController: UIViewController {
         alertVC.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
     }
     
-    // MARK: - create tasks for debug purposes
+    // MARK: - Create tasks, for debug purposes
     func createItems() {
 
         let item = TodoItem(text: "sell smth",
@@ -72,8 +75,25 @@ class ViewController: UIViewController {
         
         let item3 = TodoItem(text: "buy 3 smth", importance: .moderate)
         fileCache.addNewTask(task: item3)
-        fileCache.removeTask(withId: item3.id)
-        
+    }
+    
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return fileCache.todoItems.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil),
+                                          forCellReuseIdentifier: "taskCell")
+        let cell = taskTableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
+                
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "taskDetailSegue", sender: nil)
     }
     
 }
