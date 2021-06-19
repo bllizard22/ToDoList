@@ -12,36 +12,51 @@ class ViewController: UIViewController {
     var buildModel: BuildVersionModel!
     var fileCache: FileCache!
 
-    @IBOutlet weak var iconImage: UIImageView!
-    @IBOutlet weak var buildLabel: UILabel!
+    @IBOutlet private weak var iconImage: UIImageView!
+    @IBOutlet private weak var buildLabel: UILabel!
 
-    @IBOutlet weak var readButton: UIButton!
-    @IBOutlet weak var writeButton: UIButton!
+    @IBOutlet private weak var readButton: UIButton!
+    @IBOutlet private weak var writeButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         buildModel = BuildVersionModel()
         fileCache = FileCache(forFile: "defaultList.txt")
-        fileCache.loadFromFile()
+        do {
+            try fileCache.loadFromFile()
+        } catch let error {
+            showErrorAlert(forError: error)
+        }
     }
 
-    @IBAction func readButtonDidTouched(_ sender: UIButton) {
-        fileCache.loadFromFile()
+    @IBAction private func readButtonDidTouched(_ sender: UIButton) {
+        do {
+            try fileCache.loadFromFile()
+        } catch let error {
+            showErrorAlert(forError: error)
+        }
     }
     
-    @IBAction func writeButtonDidTouched(_ sender: Any) {
-//        createItems()
-        fileCache.saveToFile()
+    @IBAction private func writeButtonDidTouched(_ sender: Any) {
+        do {
+            try fileCache.saveToFile()
+        } catch let error {
+            showErrorAlert(forError: error)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "openTaskDetail" {
-//            let detailVCType = UINavigationController().topViewController
             guard let destination = segue.destination as? UINavigationController else { return }
             guard let topVC = destination.topViewController as? DetailViewController else { return }
             topVC.fileCache = fileCache
         }
+    }
+    
+    private func showErrorAlert(forError error: Error) {
+        let alertVC = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
     }
     
     // MARK: - create tasks for debug purposes
@@ -49,7 +64,7 @@ class ViewController: UIViewController {
 
         let item = TodoItem(text: "sell smth",
                             importance: .high,
-                            deadline: Date().timeIntervalSince1970 + 3600*24*7)
+                            deadline: Date(timeIntervalSinceNow: 3600*24*7))
         fileCache.addNewTask(task: item)
         
         let item2 = TodoItem(text: "buy smth", importance: .moderate)

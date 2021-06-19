@@ -7,13 +7,18 @@
 
 import Foundation
 
-class FileCache {
+enum FileCacheError: Error {
+    case parsingError
+    case fileAccessError
+}
+
+final class FileCache {
     
-    public private(set) var todoItems: [String: TodoItem]
+    private(set) var todoItems: [String: TodoItem]
     private var fileName: String
     
     private let fileManager = FileManager()
-    private var cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+    private var cacheDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     
     init(forFile: String) {
         self.todoItems = [String: TodoItem]()
@@ -28,8 +33,10 @@ class FileCache {
         todoItems.removeValue(forKey: id)
     }
     
-    func saveToFile() {
-        guard let path = cacheDir?.appendingPathComponent(fileName) else { return }
+    func saveToFile() throws {
+        guard let path = cacheDir?.appendingPathComponent(fileName) else {
+            throw FileCacheError.fileAccessError
+        }
         var dictToSave = [String: Any]()
         for item in self.todoItems.values {
             dictToSave[item.id] = item.json
@@ -43,17 +50,22 @@ class FileCache {
             do {
                 try contentsOfFile.write(to: path, options: [])
                 print("File \(fileName) created")
-            } catch let error as NSError {
-                print("could't create file text.txt because of error: \(error)")
+            } catch {
+                throw FileCacheError.fileAccessError
             }
-        } catch let error as NSError {
-            print("Error in JSONSerialization: \(error)")
+        } catch {
+            throw FileCacheError.parsingError
         }
     }
     
-    func loadFromFile() {
-        guard checkDirectory() != nil else { return }
-        guard let filePath = cacheDir?.appendingPathComponent(fileName) else { return }
+    func loadFromFile() throws {
+        guard try checkDirectory() != nil else {
+            throw FileCacheError.fileAccessError
+        }
+        
+        guard let filePath = cacheDir?.appendingPathComponent(fileName) else {
+            throw FileCacheError.fileAccessError
+        }
         
         do {
             let fileContent = try Data(contentsOf: filePath, options: [])
@@ -67,12 +79,12 @@ class FileCache {
                 }
             }
             print(todoItems)
-        } catch let error as NSError {
-            print("There is an reading error: \(error)")
+        } catch {
+            throw FileCacheError.fileAccessError
         }
     }
     
-    private func checkDirectory() -> String? {
+    private func checkDirectory() throws -> String? {
         do {
             guard let path = cacheDir?.path else { return nil }
             let dirPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).last
@@ -80,20 +92,19 @@ class FileCache {
                 try FileManager.default.createDirectory(atPath: dirPath!.path, withIntermediateDirectories: true, attributes: nil)
             }
             
-            let filesInDirectory = try fileManager.contentsOfDirectory(atPath: path)
-            let files = filesInDirectory
-            if files.count > 0 {
+            let files = try fileManager.contentsOfDirectory(atPath: path)
+            if !files.isEmpty {
                 print("Files in dir: \(files)")
                 if files.contains(fileName) {
-                    print("\(fileName) found")
+                    print("'\(fileName)' found")
                     return fileName
                 } else {
                     print("File not found")
                     return nil
                 }
             }
-        } catch let error as NSError {
-            print(error)
+        } catch {
+            throw FileCacheError.fileAccessError
         }
         return nil
     }

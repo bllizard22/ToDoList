@@ -268,7 +268,7 @@
                                 <rect key="frame" x="16" y="193" width="382" height="703"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="oaU-Au-X0v">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" reuseIdentifier="taskCell" id="oaU-Au-X0v">
                                         <rect key="frame" x="0.0" y="28" width="382" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oaU-Au-X0v" id="JEO-bQ-wNa">
@@ -284,9 +284,11 @@
                         <constraints>
                             <constraint firstItem="NmA-rg-teD" firstAttribute="top" secondItem="kEG-gK-p7W" secondAttribute="top" constant="60" id="8aw-xh-MRE"/>
                             <constraint firstItem="UBs-GG-IlM" firstAttribute="leading" secondItem="kEG-gK-p7W" secondAttribute="leading" constant="16" id="DUN-Ir-LGJ"/>
+                            <constraint firstItem="kEG-gK-p7W" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="NmA-rg-teD" secondAttribute="trailing" constant="40" id="FDi-zM-y8S"/>
                             <constraint firstItem="kEG-gK-p7W" firstAttribute="trailing" secondItem="qw8-UE-xez" secondAttribute="trailing" constant="32" id="HjQ-gj-ou1"/>
                             <constraint firstAttribute="bottom" secondItem="UBs-GG-IlM" secondAttribute="bottom" id="M93-er-sG6"/>
                             <constraint firstItem="UBs-GG-IlM" firstAttribute="top" secondItem="ixt-wV-Rbx" secondAttribute="bottom" constant="12" id="MEB-8d-7z7"/>
+                            <constraint firstItem="qw8-UE-xez" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ixt-wV-Rbx" secondAttribute="trailing" constant="40" id="Qvo-kN-TpU"/>
                             <constraint firstItem="ixt-wV-Rbx" firstAttribute="leading" secondItem="NmA-rg-teD" secondAttribute="leading" id="T2L-kJ-AHN"/>
                             <constraint firstItem="NmA-rg-teD" firstAttribute="leading" secondItem="kEG-gK-p7W" secondAttribute="leading" constant="32" id="U09-Mw-vY3"/>
                             <constraint firstItem="kEG-gK-p7W" firstAttribute="trailing" secondItem="UBs-GG-IlM" secondAttribute="trailing" constant="16" id="bYZ-s4-Dxa"/>

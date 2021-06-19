@@ -11,12 +11,12 @@ struct TodoItem {
     let id: String
     let text: String
     let importance: Priority
-    let deadline: Double?
+    let deadline: Date?
     
     init(id: String = UUID().uuidString,
          text: String,
          importance: Priority,
-         deadline: Double? = nil) {
+         deadline: Date? = nil) {
         self.id = id
         self.text = text
         self.importance = importance
