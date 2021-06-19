@@ -10,12 +10,12 @@ import Foundation
 extension TodoItem {
     
     static func parseJSON(data: Any) -> TodoItem? {
-        let dict = data as? [String: Any]
-        let id = dict?["id"] as? String ?? "0"
-        let text = dict?["text"] as? String ?? "0"
+        guard let dict = data as? [String: Any] else { return nil }
+        guard let id = dict["id"] as? String else { return nil }
+        guard let text = dict["text"] as? String else { return nil }
         
         var importance: Priority
-        switch dict?["importance"] as? Int ?? 1 {
+        switch dict["importance"] as? Int ?? 1 {
         case 0:
             importance = Priority.low
         case 2:
@@ -24,13 +24,7 @@ extension TodoItem {
             importance = Priority.moderate
         }
         
-        let deadlineRaw = dict?["deadline"] as? Double ?? 0
-        var deadline: Double?
-        if deadlineRaw == 0 {
-            deadline = nil
-        } else {
-            deadline = deadlineRaw
-        }
+        let deadline = dict["deadline"] as? Date
         
         return self.init(id: id,
                          text: text,
@@ -39,10 +33,12 @@ extension TodoItem {
     }
     
     var json: [String: Any] {
-        return ["id": id,
-                "text": text,
-                "importance": importance.rawValue,
-                "deadline": deadline ?? 0]
+        return [
+            "id": id,
+            "text": text,
+            "importance": importance.rawValue,
+            "deadline": deadline?.timeIntervalSince1970 as Any
+        ]
     }
     
 }
