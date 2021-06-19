@@ -8,7 +8,7 @@
 import Foundation
 
 class BuildVersionModel {
-    
+ 
     let buildNumber: String
     let versionNumber: String
 
