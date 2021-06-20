@@ -24,6 +24,9 @@
                             <constraint firstAttribute="width" constant="48" id="hap-BC-ux0"/>
                         </constraints>
                         <state key="normal" image="Ellipse"/>
+                        <connections>
+                            <action selector="doneButtonDidPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="eGB-dG-RRd"/>
+                        </connections>
                     </button>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Lei-pJ-ewk">
                         <rect key="frame" x="52" y="18" width="119" height="20.5"/>
@@ -47,6 +50,10 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <color key="backgroundColor" name="Background_Secondary"/>
+            <connections>
+                <outlet property="doneButton" destination="twa-5o-SnU" id="a7p-EN-cSA"/>
+                <outlet property="taskLabel" destination="RVM-XV-kGh" id="Llb-Da-zEr"/>
+            </connections>
             <point key="canvasLocation" x="-197.10144927536234" y="145.98214285714286"/>
         </tableViewCell>
     </objects>

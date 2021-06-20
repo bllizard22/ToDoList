@@ -11,11 +11,16 @@ class ViewController: UIViewController {
 
     var buildModel: BuildVersionModel!
     var fileCache: FileCache!
+    var tasksList: [String] {
+        fileCache.todoItems.map { $0.value.id }.sorted()
+    }
+    var doneTasksList = [String]()
     
     @IBOutlet private weak var doneLabel: UILabel!
-    @IBOutlet weak var showDoneButton: UIButton!
+    @IBOutlet private weak var showDoneButton: UIButton!
     @IBOutlet weak var taskTableView: UITableView!
     
+    @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,9 +30,18 @@ class ViewController: UIViewController {
         
         buildModel = BuildVersionModel()
         fileCache = FileCache(forFile: "defaultList.txt")
-        createItems()
+//        createItems()
         do {
             try fileCache.loadFromFile()
+        } catch let error {
+            showErrorAlert(forError: error)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        do {
+            try fileCache.saveToFile()
         } catch let error {
             showErrorAlert(forError: error)
         }
@@ -49,12 +63,26 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func addNewTaskDidPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: "taskDetailSegue", sender: nil)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "taskDetailSegue" {
             guard let destination = segue.destination as? UINavigationController else { return }
             guard let topVC = destination.topViewController as? DetailViewController else { return }
-            topVC.currentItem = fileCache.todoItems.values.first
+            if let id = sender as? String {
+                topVC.currentItem = fileCache.todoItems[id]
+            } else {
+                topVC.currentItem = nil
+            }
         }
+    }
+    
+    override func updateViewConstraints() {
+        tableViewHeightConstraint.constant = taskTableView.contentSize.height
+        super.updateViewConstraints()
+        doneLabel.text = "Done - \(doneTasksList.count)"
     }
     
     private func showErrorAlert(forError error: Error) {
@@ -75,25 +103,73 @@ class ViewController: UIViewController {
         
         let item3 = TodoItem(text: "buy 3 smth", importance: .moderate)
         fileCache.addNewTask(task: item3)
+        
+        do {
+            try fileCache.saveToFile()
+        } catch {
+            showErrorAlert(forError: FileCacheError.fileAccessError)
+        }
     }
     
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fileCache.todoItems.count
+        return tasksList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil),
-                                          forCellReuseIdentifier: "taskCell")
+                               forCellReuseIdentifier: "taskCell")
+        
         let cell = taskTableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
-                
+        
+        if let cell = cell as? TaskTableViewCell {
+            let id = tasksList[indexPath.row]
+            let text = fileCache.todoItems[id]
+            cell.taskLabel.text = text?.text
+        }
+         
+        updateViewConstraints()
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "taskDetailSegue", sender: nil)
+        performSegue(withIdentifier: "taskDetailSegue", sender: tasksList[indexPath.row])
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        return UISwipeActionsConfiguration(actions: [doneAction(indexPath)])
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        return UISwipeActionsConfiguration(actions: [deleteAction(indexPath)])
+    }
+    
+    private func doneAction(_ indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .normal,
+                                        title: "",
+                                        handler: { [ weak self ] (action, view, completion) in
+                                            self?.doneTasksList.append(self?.tasksList[indexPath.row] ?? "")
+                                        }
+        )
+        action.image = UIImage(named: "Cell")
+        action.backgroundColor = UIColor(named: "Green")
+        return action
+    }
+    
+    private func deleteAction(_ indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .normal,
+                                        title: "",
+                                        handler: { [ weak self ] (action, view, completion) in
+                                            let id = self?.tasksList[indexPath.row] ?? ""
+                                            self?.fileCache.removeTask(withId: id)
+                                            self?.taskTableView.reloadData()
+                                        }
+        )
+        action.image = UIImage(named: "Bin")
+        action.backgroundColor = UIColor(named: "DeleteColor")
+        return action
     }
     
 }

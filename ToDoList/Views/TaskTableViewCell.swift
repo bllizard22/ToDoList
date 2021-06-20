@@ -9,6 +9,9 @@ import UIKit
 
 class TaskTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var taskLabel: UILabel!
+    @IBOutlet weak var doneButton: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.accessoryType = .disclosureIndicator
@@ -16,6 +19,10 @@ class TaskTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    @IBAction func doneButtonDidPressed(_ sender: UIButton) {
+        
     }
     
 }

@@ -31,6 +31,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         
         setupVC()
+        loadItem()
     }
     
     private func setupVC() {
@@ -47,6 +48,11 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         rootVC = presentingViewController as? ViewController
         textView.delegate = self
     }
+    
+    private func loadItem() {
+        guard let item = currentItem else { return }
+        textView.text = item.text
+    }
 
     @IBAction private func cancelAction(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
@@ -56,7 +62,6 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         let text = textView.text
         
         var importance: Priority
-        print("Current segment \(importanceSegmets.selectedSegmentIndex)")
         switch importanceSegmets.selectedSegmentIndex {
         case 0:
             importance = .low
@@ -73,7 +78,9 @@ class DetailViewController: UIViewController, UITextViewDelegate {
                                       deadline: deadline)
         rootVC?.fileCache.addNewTask(task: item)
         
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) { [ weak self ] in
+            self?.rootVC?.taskTableView.reloadData()
+        }
     }
     
     func textViewDidChange(_ textView: UITextView) {

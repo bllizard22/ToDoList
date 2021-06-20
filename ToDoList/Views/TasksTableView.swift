@@ -24,6 +24,7 @@ class TasksTableView: UITableView {
         self.clipsToBounds = true
         self.rowHeight = 56
         
+        self.tableFooterView = UITableViewCell(style: .default, reuseIdentifier: "cell")
     }
 
 }

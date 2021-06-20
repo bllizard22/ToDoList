@@ -244,8 +244,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UBs-GG-IlM" customClass="TasksTableView" customModule="ToDoList" customModuleProvider="target">
-                                <rect key="frame" x="16" y="193" width="382" height="703"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <rect key="frame" x="16" y="193" width="382" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="1i6-33-fBS"/>
+                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="56" id="oaU-Au-X0v" customClass="TaskTableViewCell" customModule="ToDoList" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="382" height="56"/>
@@ -262,20 +264,38 @@
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                 <state key="normal" title="Show"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bgb-5W-hnc">
+                                <rect key="frame" x="185" y="802" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Bgb-5W-hnc" secondAttribute="height" multiplier="1:1" id="gtc-XC-bKS"/>
+                                    <constraint firstAttribute="height" constant="44" id="yfk-1E-yRv"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="addNewTaskDidPressed:" destination="mj5-HG-pT5" eventType="touchUpInside" id="ORl-5P-Hm6"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Plus" translatesAutoresizingMaskIntoConstraints="NO" id="uzI-ad-QKp">
+                                <rect key="frame" x="185" y="802" width="44" height="44"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kEG-gK-p7W"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstItem="uzI-ad-QKp" firstAttribute="trailing" secondItem="Bgb-5W-hnc" secondAttribute="trailing" id="3OE-bA-HOv"/>
                             <constraint firstItem="NmA-rg-teD" firstAttribute="top" secondItem="kEG-gK-p7W" secondAttribute="top" constant="60" id="8aw-xh-MRE"/>
                             <constraint firstItem="UBs-GG-IlM" firstAttribute="leading" secondItem="kEG-gK-p7W" secondAttribute="leading" constant="16" id="DUN-Ir-LGJ"/>
                             <constraint firstItem="kEG-gK-p7W" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="NmA-rg-teD" secondAttribute="trailing" constant="40" id="FDi-zM-y8S"/>
-                            <constraint firstAttribute="bottom" secondItem="UBs-GG-IlM" secondAttribute="bottom" id="M93-er-sG6"/>
                             <constraint firstItem="UBs-GG-IlM" firstAttribute="top" secondItem="ixt-wV-Rbx" secondAttribute="bottom" constant="12" id="MEB-8d-7z7"/>
                             <constraint firstItem="ixt-wV-Rbx" firstAttribute="leading" secondItem="NmA-rg-teD" secondAttribute="leading" id="T2L-kJ-AHN"/>
                             <constraint firstItem="NmA-rg-teD" firstAttribute="leading" secondItem="kEG-gK-p7W" secondAttribute="leading" constant="32" id="U09-Mw-vY3"/>
+                            <constraint firstItem="Bgb-5W-hnc" firstAttribute="centerX" secondItem="lKo-F6-BrS" secondAttribute="centerX" id="U1O-r4-aj6"/>
+                            <constraint firstItem="uzI-ad-QKp" firstAttribute="bottom" secondItem="Bgb-5W-hnc" secondAttribute="bottom" id="U8O-GB-l3g"/>
+                            <constraint firstItem="uzI-ad-QKp" firstAttribute="top" secondItem="Bgb-5W-hnc" secondAttribute="top" id="X07-1T-AQA"/>
                             <constraint firstItem="JAP-zO-cSN" firstAttribute="centerY" secondItem="ixt-wV-Rbx" secondAttribute="centerY" id="YDx-8M-GgM"/>
                             <constraint firstItem="kEG-gK-p7W" firstAttribute="trailing" secondItem="UBs-GG-IlM" secondAttribute="trailing" constant="16" id="bYZ-s4-Dxa"/>
                             <constraint firstItem="kEG-gK-p7W" firstAttribute="trailing" secondItem="JAP-zO-cSN" secondAttribute="trailing" constant="32" id="cXb-7k-dc3"/>
+                            <constraint firstItem="kEG-gK-p7W" firstAttribute="bottom" secondItem="Bgb-5W-hnc" secondAttribute="bottom" constant="16" id="dtl-tv-WxB"/>
+                            <constraint firstItem="uzI-ad-QKp" firstAttribute="leading" secondItem="Bgb-5W-hnc" secondAttribute="leading" id="hRW-um-wSv"/>
                             <constraint firstItem="ixt-wV-Rbx" firstAttribute="top" secondItem="NmA-rg-teD" secondAttribute="bottom" constant="18" id="oiw-nP-XQi"/>
                             <constraint firstItem="JAP-zO-cSN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ixt-wV-Rbx" secondAttribute="trailing" constant="40" id="qM1-2R-HDD"/>
                         </constraints>
@@ -283,13 +303,14 @@
                     <connections>
                         <outlet property="doneLabel" destination="ixt-wV-Rbx" id="GcW-d0-bkL"/>
                         <outlet property="showDoneButton" destination="JAP-zO-cSN" id="tUz-4f-rt5"/>
+                        <outlet property="tableViewHeightConstraint" destination="1i6-33-fBS" id="go6-hc-rN7"/>
                         <outlet property="taskTableView" destination="UBs-GG-IlM" id="AKr-y8-Q9G"/>
                         <segue destination="zoR-pr-MOp" kind="presentation" identifier="taskDetailSegue" id="2BL-Bu-10M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nh2-fE-lHs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-241" y="130"/>
+            <point key="canvasLocation" x="-242.0289855072464" y="129.91071428571428"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="wNX-M8-Huh">
@@ -311,6 +332,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Plus" width="44" height="44"/>
         <image name="icon" width="512" height="512"/>
         <namedColor name="Background">
             <color red="0.96862745098039216" green="0.96470588235294119" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
