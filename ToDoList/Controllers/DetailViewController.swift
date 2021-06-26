@@ -54,6 +54,22 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     private func loadItem() {
         guard let item = currentItem else { return }
         textView.text = item.text
+        var index: Int
+        switch item.importance {
+        case .low:
+            index = 0
+        case .high:
+            index = 2
+        default:
+            index = 1
+        }
+        importanceSegmets.selectedSegmentIndex = index
+        if item.deadline != nil {
+            deadlineSwitch.isOn = true
+            showDeadlinePicker()
+            let date = item.deadline ?? Date()
+            deadlinePicker.setDate(date, animated: true)
+        }
     }
 
     @IBAction private func cancelAction(_ sender: UIBarButtonItem) {
@@ -63,22 +79,30 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     @IBAction private func saveTask(_ sender: UIBarButtonItem) {
         let text = textView.text
         
-        var importance: Priority
-        switch importanceSegmets.selectedSegmentIndex {
-        case 0:
-            importance = .low
-        case 2:
-            importance = .high
-        default:
-            importance = .moderate
+        if currentItem == nil {
+            var importance: Priority
+            switch importanceSegmets.selectedSegmentIndex {
+            case 0:
+                importance = .low
+            case 2:
+                importance = .high
+            default:
+                importance = .moderate
+            }
+            
+            let deadline = deadlineSwitch.isOn ? deadlinePicker.date : nil
+            
+            let item: TodoItem = TodoItem(text: text ?? "",
+                                          importance: importance,
+                                          deadline: deadline)
+            rootVC?.fileCache.addNewTask(task: item)
+        } else {
+            let item = TodoItem(id: currentItem!.id,
+                                text: textView.text,
+                                importance: Priority(rawValue: importanceSegmets.selectedSegmentIndex)!,
+                                deadline: deadlineSwitch.isOn ? deadlinePicker.date : nil)
+            rootVC?.fileCache.addNewTask(task: item)
         }
-        
-        let deadline = deadlineSwitch.isOn ? deadlinePicker.date : nil
-        
-        let item: TodoItem = TodoItem(text: text ?? "",
-                                      importance: importance,
-                                      deadline: deadline)
-        rootVC?.fileCache.addNewTask(task: item)
         
         closeDetailVC()
     }
@@ -87,20 +111,24 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         saveButton.isEnabled = textView.text != nil && textView.text != ""
     }
     
+    private func showDeadlinePicker() {
+        deadlinePicker = UIDatePicker()
+        deadlinePicker.tag = 5
+        if #available (iOS 14, *) {
+            deadlinePicker.preferredDatePickerStyle = .inline
+        }
+        deadlinePicker.datePickerMode = .date
+        deadlinePicker.minimumDate = Date()
+        
+        settingsViewHeightConstraint.constant += deadlinePicker.frame.height + settingsStack.spacing
+        settingsStack.addArrangedSubview(deadlinePicker)
+                    
+        settingsView.setNeedsLayout()
+    }
+    
     @IBAction private func deadlineSwitchChanged(_ sender: UISwitch) {
         if sender.isOn {
-            deadlinePicker = UIDatePicker()
-            deadlinePicker.tag = 5
-            if #available (iOS 14, *) {
-                deadlinePicker.preferredDatePickerStyle = .inline
-            }
-            deadlinePicker.datePickerMode = .date
-            deadlinePicker.minimumDate = Date()
-            
-            settingsViewHeightConstraint.constant += deadlinePicker.frame.height + settingsStack.spacing
-            settingsStack.addArrangedSubview(deadlinePicker)
-                        
-            settingsView.setNeedsLayout()
+            showDeadlinePicker()
         } else {
             settingsViewHeightConstraint.constant -= deadlinePicker.frame.height + settingsStack.spacing
             
@@ -114,6 +142,10 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         rootVC?.fileCache.removeTask(withId: id)
         
         closeDetailVC()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     private func closeDetailVC() {

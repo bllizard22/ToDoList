@@ -16,10 +16,10 @@ final class FileCache {
     
     private var fileName: String
     private(set) var todoItems: [String: TodoItem]
-//    private var doneTasksList = [String]()
-//    var doneTodoItems: [String: TodoItem] {
-//        return todoItems.filter { doneTasksList.contains($0.value.id) }
-//    }
+    
+    var doneTasksList: [String] {
+        self.todoItems.filter { $0.value.isDone }.map { $0.value.id }.sorted()
+    }
     
     private let fileManager = FileManager()
     private var cacheDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
@@ -27,6 +27,10 @@ final class FileCache {
     init(forFile: String) {
         self.todoItems = [String: TodoItem]()
         self.fileName = forFile
+    }
+    
+    func toggleTaskDone(forID id: String) {
+        todoItems[id]?.toggleDoneStatus()
     }
     
     func addNewTask(task: TodoItem) {
@@ -38,28 +42,35 @@ final class FileCache {
     }
     
     func saveToFile() throws {
-        guard let path = cacheDir?.appendingPathComponent(fileName) else {
-            throw FileCacheError.fileAccessError
-        }
-        var dictToSave = [String: Any]()
-        for item in self.todoItems.values {
-            dictToSave[item.id] = item.json
-        }
-        
-        do {
-            print("JSON is valid", JSONSerialization.isValidJSONObject(dictToSave))
-            let data = try JSONSerialization.data(withJSONObject: dictToSave, options: [])
-            let contentsOfFile = data
-            
-            do {
-                try contentsOfFile.write(to: path, options: [])
-                print("File \(fileName) created")
-            } catch {
+//        do {
+//        try DispatchQueue.global(qos: .background).sync(execute: { () -> Void in
+
+            guard let path = cacheDir?.appendingPathComponent(fileName) else {
                 throw FileCacheError.fileAccessError
             }
-        } catch {
-            throw FileCacheError.parsingError
-        }
+            var dictToSave = [String: Any]()
+            for item in self.todoItems.values {
+                dictToSave[item.id] = item.json
+            }
+            
+            do {
+                print("JSON is valid", JSONSerialization.isValidJSONObject(dictToSave))
+                let data = try JSONSerialization.data(withJSONObject: dictToSave, options: [])
+                let contentsOfFile = data
+                
+                do {
+                    try contentsOfFile.write(to: path, options: [])
+                    print("File \(fileName) created")
+                } catch {
+                    throw FileCacheError.fileAccessError
+                }
+            } catch {
+                throw FileCacheError.parsingError
+            }
+//        })
+//        } catch let error as FileCacheError {
+//            throw error
+//        }
     }
     
     func loadFromFile() throws {

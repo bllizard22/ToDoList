@@ -13,6 +13,12 @@ struct TodoItem {
     let importance: Priority
     let deadline: Date?
     
+    var isDone = false
+    
+    mutating func toggleDoneStatus() {
+        isDone = !isDone
+    }
+    
     init(id: String = UUID().uuidString,
          text: String,
          importance: Priority,
@@ -22,4 +28,6 @@ struct TodoItem {
         self.importance = importance
         self.deadline = deadline
     }
+    
+    
 }
