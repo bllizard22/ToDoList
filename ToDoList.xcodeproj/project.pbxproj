@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		293D560E856EBD3FEB6951C6 /* Pods_ToDoList_ToDoListUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D63F2063E8D745A1767B6F /* Pods_ToDoList_ToDoListUITests.framework */; };
 		4108CB9B4E3E2AEF0E2B5C7E /* Pods_ToDoListTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05277A8968B6BB0A648D7F6B /* Pods_ToDoListTests.framework */; };
+		8551DD7B267DF7CD0050C0E1 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8551DD79267DF7CD0050C0E1 /* TaskTableViewCell.swift */; };
+		8551DD7C267DF7CD0050C0E1 /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8551DD7A267DF7CD0050C0E1 /* TaskTableViewCell.xib */; };
+		8551DD81267DFE750050C0E1 /* TasksTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8551DD80267DFE750050C0E1 /* TasksTableView.swift */; };
 		8552D418266CC48400C38589 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552D417266CC48400C38589 /* AppDelegate.swift */; };
 		8552D41A266CC48400C38589 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552D419266CC48400C38589 /* SceneDelegate.swift */; };
 		8552D41C266CC48400C38589 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552D41B266CC48400C38589 /* ViewController.swift */; };
@@ -53,6 +56,9 @@
 		5B2AE54927D927325AC83B7B /* Pods-ToDoList-ToDoListUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ToDoListUITests.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		62D63F2063E8D745A1767B6F /* Pods_ToDoList_ToDoListUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList_ToDoListUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FA6D18557EE9DBB1AB7DB4B /* Pods-ToDoList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList.release.xcconfig"; path = "Target Support Files/Pods-ToDoList/Pods-ToDoList.release.xcconfig"; sourceTree = "<group>"; };
+		8551DD79267DF7CD0050C0E1 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
+		8551DD7A267DF7CD0050C0E1 /* TaskTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTableViewCell.xib; sourceTree = "<group>"; };
+		8551DD80267DFE750050C0E1 /* TasksTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksTableView.swift; sourceTree = "<group>"; };
 		8552D414266CC48300C38589 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8552D417266CC48400C38589 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8552D419266CC48400C38589 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -188,6 +194,9 @@
 			isa = PBXGroup;
 			children = (
 				8552D49C266CD1DF00C38589 /* IconImageView.swift */,
+				8551DD79267DF7CD0050C0E1 /* TaskTableViewCell.swift */,
+				8551DD7A267DF7CD0050C0E1 /* TaskTableViewCell.xib */,
+				8551DD80267DFE750050C0E1 /* TasksTableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -344,6 +353,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8551DD7C267DF7CD0050C0E1 /* TaskTableViewCell.xib in Resources */,
 				8552D51B266CE25900C38589 /* Localizable.strings in Resources */,
 				8552D51E266CE25900C38589 /* InfoPlist.strings in Resources */,
 				8552D424266CC49500C38589 /* LaunchScreen.storyboard in Resources */,
@@ -459,8 +469,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8551DD81267DFE750050C0E1 /* TasksTableView.swift in Sources */,
 				8552D4A9266CD41100C38589 /* BuildModel.swift in Sources */,
 				8552D41C266CC48400C38589 /* ViewController.swift in Sources */,
+				8551DD7B267DF7CD0050C0E1 /* TaskTableViewCell.swift in Sources */,
 				8552D54A266FC97F00C38589 /* Priority.swift in Sources */,
 				8552D49D266CD1DF00C38589 /* IconImageView.swift in Sources */,
 				8552D418266CC48400C38589 /* AppDelegate.swift in Sources */,

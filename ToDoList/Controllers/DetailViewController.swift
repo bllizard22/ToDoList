@@ -31,6 +31,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         
         setupVC()
+        loadItem()
     }
     
     private func setupVC() {
@@ -46,17 +47,23 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         
         rootVC = presentingViewController as? ViewController
         textView.delegate = self
+        
+        deleteButton.isEnabled = currentItem != nil
+    }
+    
+    private func loadItem() {
+        guard let item = currentItem else { return }
+        textView.text = item.text
     }
 
     @IBAction private func cancelAction(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
+        closeDetailVC()
     }
 
     @IBAction private func saveTask(_ sender: UIBarButtonItem) {
         let text = textView.text
         
         var importance: Priority
-        print("Current segment \(importanceSegmets.selectedSegmentIndex)")
         switch importanceSegmets.selectedSegmentIndex {
         case 0:
             importance = .low
@@ -73,7 +80,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
                                       deadline: deadline)
         rootVC?.fileCache.addNewTask(task: item)
         
-        dismiss(animated: true, completion: nil)
+        closeDetailVC()
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -103,10 +110,15 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction private func deleteTask(_ sender: UIButton) {
-        if let id = fileCache?.todoItems.first?.value.id {
-            fileCache?.removeTask(withId: id)
-        }
         guard let id = currentItem?.id else { return }
         rootVC?.fileCache.removeTask(withId: id)
+        
+        closeDetailVC()
+    }
+    
+    private func closeDetailVC() {
+        dismiss(animated: true) { [ weak self ] in
+            self?.rootVC?.taskTableView.reloadData()
+        }
     }
 }
