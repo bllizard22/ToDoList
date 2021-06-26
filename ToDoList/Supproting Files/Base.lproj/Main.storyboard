@@ -42,6 +42,13 @@
                                 <rect key="frame" x="175.5" y="756" width="63" height="30"/>
                                 <state key="normal" title="Add Task"/>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4us-qR-nWu">
+                                <rect key="frame" x="196" y="189" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="Background"/>
@@ -169,7 +176,7 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="112" id="Are-vA-KrL"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="112" id="Are-vA-KrL"/>
                                     <constraint firstItem="unG-So-3A9" firstAttribute="top" secondItem="YP8-YF-gHa" secondAttribute="top" constant="11" id="TaN-3r-uPx"/>
                                     <constraint firstAttribute="bottom" secondItem="unG-So-3A9" secondAttribute="bottom" constant="11" id="apr-UQ-aXX"/>
                                     <constraint firstAttribute="trailing" secondItem="unG-So-3A9" secondAttribute="trailing" constant="16" id="mpc-Ai-lTE"/>
@@ -244,10 +251,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UBs-GG-IlM" customClass="TasksTableView" customModule="ToDoList" customModuleProvider="target">
-                                <rect key="frame" x="16" y="193" width="382" height="200"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="1i6-33-fBS"/>
-                                </constraints>
+                                <rect key="frame" x="16" y="193" width="382" height="669"/>
+                                <color key="backgroundColor" name="Background"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="56" id="oaU-Au-X0v" customClass="TaskTableViewCell" customModule="ToDoList" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="382" height="56"/>
@@ -263,6 +268,9 @@
                                 <rect key="frame" x="342" y="157" width="40" height="30"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                 <state key="normal" title="Show"/>
+                                <connections>
+                                    <action selector="doneButtonDidPressed:" destination="mj5-HG-pT5" eventType="touchUpInside" id="3O0-03-fnD"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bgb-5W-hnc">
                                 <rect key="frame" x="185" y="802" width="44" height="44"/>
@@ -298,12 +306,12 @@
                             <constraint firstItem="uzI-ad-QKp" firstAttribute="leading" secondItem="Bgb-5W-hnc" secondAttribute="leading" id="hRW-um-wSv"/>
                             <constraint firstItem="ixt-wV-Rbx" firstAttribute="top" secondItem="NmA-rg-teD" secondAttribute="bottom" constant="18" id="oiw-nP-XQi"/>
                             <constraint firstItem="JAP-zO-cSN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ixt-wV-Rbx" secondAttribute="trailing" constant="40" id="qM1-2R-HDD"/>
+                            <constraint firstItem="kEG-gK-p7W" firstAttribute="bottom" secondItem="UBs-GG-IlM" secondAttribute="bottom" id="w7y-wu-SWT"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="doneLabel" destination="ixt-wV-Rbx" id="GcW-d0-bkL"/>
                         <outlet property="showDoneButton" destination="JAP-zO-cSN" id="tUz-4f-rt5"/>
-                        <outlet property="tableViewHeightConstraint" destination="1i6-33-fBS" id="go6-hc-rN7"/>
                         <outlet property="taskTableView" destination="UBs-GG-IlM" id="AKr-y8-Q9G"/>
                         <segue destination="zoR-pr-MOp" kind="presentation" identifier="taskDetailSegue" id="2BL-Bu-10M"/>
                     </connections>
@@ -341,7 +349,7 @@
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="DeleteColor">
-            <color red="1" green="0.24705882352941178" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

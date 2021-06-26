@@ -23,6 +23,8 @@ class TasksTableView: UITableView {
         self.layer.cornerRadius = 16
         self.clipsToBounds = true
         self.rowHeight = 56
+//        self.estimatedRowHeight = 200
+//        self.rowHeight = UITableView.automaticDimension
         
         self.tableFooterView = UITableViewCell(style: .default, reuseIdentifier: "cell")
     }

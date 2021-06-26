@@ -14,8 +14,12 @@ enum FileCacheError: Error {
 
 final class FileCache {
     
-    private(set) var todoItems: [String: TodoItem]
     private var fileName: String
+    private(set) var todoItems: [String: TodoItem]
+//    private var doneTasksList = [String]()
+//    var doneTodoItems: [String: TodoItem] {
+//        return todoItems.filter { doneTasksList.contains($0.value.id) }
+//    }
     
     private let fileManager = FileManager()
     private var cacheDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first

@@ -12,21 +12,27 @@ class ViewController: UIViewController {
     var buildModel: BuildVersionModel!
     var fileCache: FileCache!
     var tasksList: [String] {
-        fileCache.todoItems.map { $0.value.id }.sorted()
+        if doneFlag {
+            return fileCache.todoItems.map { $0.value.id }.sorted()
+        } else {
+            let array = fileCache.todoItems.map { $0.value.id }
+            return array.filter { !doneTasksList.contains($0) }.sorted()
+        }
     }
     var doneTasksList = [String]()
+    var doneFlag = false
     
     @IBOutlet private weak var doneLabel: UILabel!
     @IBOutlet private weak var showDoneButton: UIButton!
     @IBOutlet weak var taskTableView: UITableView!
-    
-    @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
         taskTableView.delegate = self
         taskTableView.dataSource = self
+        taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil),
+                               forCellReuseIdentifier: "taskCell")
         
         buildModel = BuildVersionModel()
         fileCache = FileCache(forFile: "defaultList.txt")
@@ -36,6 +42,9 @@ class ViewController: UIViewController {
         } catch let error {
             showErrorAlert(forError: error)
         }
+        
+//        taskTableView.rowHeight = UITableView.automaticDimension
+//        taskTableView.estimatedRowHeight = 120
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -63,6 +72,18 @@ class ViewController: UIViewController {
         }
     }
     
+    // MARK: - IBActions
+    
+    @IBAction func doneButtonDidPressed(_ sender: UIButton) {
+        doneFlag = !doneFlag
+        taskTableView.reloadData()
+        if doneFlag {
+            showDoneButton.setTitle("Hide", for: .normal)
+        } else {
+            showDoneButton.setTitle("Show", for: .normal)
+        }
+    }
+    
     @IBAction func addNewTaskDidPressed(_ sender: UIButton) {
         performSegue(withIdentifier: "taskDetailSegue", sender: nil)
     }
@@ -77,12 +98,6 @@ class ViewController: UIViewController {
                 topVC.currentItem = nil
             }
         }
-    }
-    
-    override func updateViewConstraints() {
-        tableViewHeightConstraint.constant = taskTableView.contentSize.height
-        super.updateViewConstraints()
-        doneLabel.text = "Done - \(doneTasksList.count)"
     }
     
     private func showErrorAlert(forError error: Error) {
@@ -113,25 +128,41 @@ class ViewController: UIViewController {
     
 }
 
+// MARK: - Extension for TableView methods
+
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasksList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil),
-                               forCellReuseIdentifier: "taskCell")
+        let rawCell = taskTableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
         
-        let cell = taskTableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
-        
-        if let cell = cell as? TaskTableViewCell {
+        guard let cell = rawCell as? TaskTableViewCell else { return rawCell }
             let id = tasksList[indexPath.row]
-            let text = fileCache.todoItems[id]
-            cell.taskLabel.text = text?.text
-        }
+            let text = fileCache.todoItems[id]?.text ?? ""
+            if doneFlag, doneTasksList.contains(id) {
+                let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: text)
+                    attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
+                cell.taskLabel.textColor = .systemGray3
+                cell.taskLabel.attributedText = attributeString
+            } else {
+                let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: text)
+                cell.taskLabel.attributedText = attributeString
+                cell.taskLabel.textColor = UIColor(named: "Text")
+            }
          
-        updateViewConstraints()
+        cell.taskLabel.sizeToFit()
+        cell.taskLabel.numberOfLines = 3
+        
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let id = tasksList[indexPath.row]
+        let floatSize = CGFloat(fileCache.todoItems[id]?.text.components(separatedBy: "\n").count ?? 1)
+        let size = (floatSize - 1)  * 20.0 + 56.0
+        return size > 100 ? 98 : size
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -147,21 +178,34 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     private func doneAction(_ indexPath: IndexPath) -> UIContextualAction {
+        func changeDoneStatus(_ item: String) {
+            if doneTasksList.contains(item) {
+                guard let index = doneTasksList.firstIndex(of: item) else { return }
+                doneTasksList.remove(at: index)
+            } else {
+                doneTasksList.append(item)
+                doneTasksList.sort()
+            }
+        }
+        
         let action = UIContextualAction(style: .normal,
                                         title: "",
-                                        handler: { [ weak self ] (action, view, completion) in
-                                            self?.doneTasksList.append(self?.tasksList[indexPath.row] ?? "")
+                                        handler: { [ weak self ] (_, _, _) in
+                                            changeDoneStatus(self?.tasksList[indexPath.row] ?? "")
+                                            self?.taskTableView.reloadData()
                                         }
         )
         action.image = UIImage(named: "Cell")
         action.backgroundColor = UIColor(named: "Green")
+        doneLabel.text = "Done - \(doneTasksList.count)"
+        
         return action
     }
     
     private func deleteAction(_ indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal,
                                         title: "",
-                                        handler: { [ weak self ] (action, view, completion) in
+                                        handler: { [ weak self ] (_, _, _) in
                                             let id = self?.tasksList[indexPath.row] ?? ""
                                             self?.fileCache.removeTask(withId: id)
                                             self?.taskTableView.reloadData()
@@ -169,6 +213,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         )
         action.image = UIImage(named: "Bin")
         action.backgroundColor = UIColor(named: "DeleteColor")
+        doneLabel.text = "Done - \(doneTasksList.count)"
+        
         return action
     }
     
