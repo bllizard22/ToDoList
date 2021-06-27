@@ -26,10 +26,13 @@ extension TodoItem {
         
         let deadline = dict["deadline"] as? Date
         
+        let isDone = dict["isDone"] as? Bool ?? false
+        
         return self.init(id: id,
                          text: text,
                          importance: importance,
-                         deadline: deadline)
+                         deadline: deadline,
+                         isDone: isDone)
     }
     
     var json: [String: Any] {
@@ -37,7 +40,8 @@ extension TodoItem {
             "id": id,
             "text": text,
             "importance": importance.rawValue,
-            "deadline": deadline?.timeIntervalSince1970 as Any
+            "deadline": deadline?.timeIntervalSince1970 as Any,
+            "isDone": isDone
         ]
     }
     

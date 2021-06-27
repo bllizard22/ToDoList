@@ -42,35 +42,28 @@ final class FileCache {
     }
     
     func saveToFile() throws {
-//        do {
-//        try DispatchQueue.global(qos: .background).sync(execute: { () -> Void in
-
-            guard let path = cacheDir?.appendingPathComponent(fileName) else {
-                throw FileCacheError.fileAccessError
-            }
-            var dictToSave = [String: Any]()
-            for item in self.todoItems.values {
-                dictToSave[item.id] = item.json
-            }
+        guard let path = cacheDir?.appendingPathComponent(fileName) else {
+            throw FileCacheError.fileAccessError
+        }
+        var dictToSave = [String: Any]()
+        for item in self.todoItems.values {
+            dictToSave[item.id] = item.json
+        }
+        
+        do {
+            print("JSON is valid", JSONSerialization.isValidJSONObject(dictToSave))
+            let data = try JSONSerialization.data(withJSONObject: dictToSave, options: [])
+            let contentsOfFile = data
             
             do {
-                print("JSON is valid", JSONSerialization.isValidJSONObject(dictToSave))
-                let data = try JSONSerialization.data(withJSONObject: dictToSave, options: [])
-                let contentsOfFile = data
-                
-                do {
-                    try contentsOfFile.write(to: path, options: [])
-                    print("File \(fileName) created")
-                } catch {
-                    throw FileCacheError.fileAccessError
-                }
+                try contentsOfFile.write(to: path, options: [])
+                print("File \(fileName) created")
             } catch {
-                throw FileCacheError.parsingError
+                throw FileCacheError.fileAccessError
             }
-//        })
-//        } catch let error as FileCacheError {
-//            throw error
-//        }
+        } catch {
+            throw FileCacheError.parsingError
+        }
     }
     
     func loadFromFile() throws {
