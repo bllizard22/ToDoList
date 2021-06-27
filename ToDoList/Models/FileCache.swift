@@ -42,53 +42,63 @@ final class FileCache {
     }
     
     func saveToFile() throws {
-        guard let path = cacheDir?.appendingPathComponent(fileName) else {
-            throw FileCacheError.fileAccessError
-        }
-        var dictToSave = [String: Any]()
-        for item in self.todoItems.values {
-            dictToSave[item.id] = item.json
-        }
-        
         do {
-            print("JSON is valid", JSONSerialization.isValidJSONObject(dictToSave))
-            let data = try JSONSerialization.data(withJSONObject: dictToSave, options: [])
-            let contentsOfFile = data
-            
-            do {
-                try contentsOfFile.write(to: path, options: [])
-                print("File \(fileName) created")
-            } catch {
+        try DispatchQueue.global(qos: .background).sync(execute: { () -> Void in
+            guard let path = cacheDir?.appendingPathComponent(fileName) else {
                 throw FileCacheError.fileAccessError
             }
-        } catch {
-            throw FileCacheError.parsingError
+            var dictToSave = [String: Any]()
+            for item in self.todoItems.values {
+                dictToSave[item.id] = item.json
+            }
+            
+            do {
+                print("JSON is valid", JSONSerialization.isValidJSONObject(dictToSave))
+                let data = try JSONSerialization.data(withJSONObject: dictToSave, options: [])
+                let contentsOfFile = data
+                
+                do {
+                    try contentsOfFile.write(to: path, options: [])
+                    print("File \(fileName) created")
+                } catch {
+                    throw FileCacheError.fileAccessError
+                }
+            } catch {
+                throw FileCacheError.parsingError
+            }
+        })
+        } catch let error as FileCacheError {
+            throw error
         }
     }
     
     func loadFromFile() throws {
-        guard try checkDirectory() != nil else {
-            throw FileCacheError.fileAccessError
-        }
-        
-        guard let filePath = cacheDir?.appendingPathComponent(fileName) else {
-            throw FileCacheError.fileAccessError
-        }
-        
         do {
-            let fileContent = try Data(contentsOf: filePath, options: [])
-            print("Content of the file is: \(fileContent)")
-            let jsonRaw = try JSONSerialization.jsonObject(with: fileContent, options: .allowFragments) as? [String: Any]
-            print(jsonRaw ?? "empty json")
-            guard let json = jsonRaw else { return }
-            for value in json.values {
-                if let item = TodoItem.parseJSON(data: value) {
-                    self.todoItems[item.id] = item
+            try DispatchQueue.global(qos: .background).sync(execute: { () -> Void in
+                guard try checkDirectory() != nil else {
+                    throw FileCacheError.fileAccessError
                 }
-            }
-            print(todoItems)
-        } catch {
-            throw FileCacheError.fileAccessError
+                
+                guard let filePath = cacheDir?.appendingPathComponent(fileName) else {
+                    throw FileCacheError.fileAccessError
+                }
+                
+                do {
+                    let fileContent = try Data(contentsOf: filePath, options: [])
+                    print("Content of the file is: \(fileContent)")
+                    let jsonRaw = try JSONSerialization.jsonObject(with: fileContent, options: .allowFragments) as? [String: Any]
+                    print(jsonRaw ?? "empty json")
+                    guard let json = jsonRaw else { return }
+                    for value in json.values {
+                        if let item = TodoItem.parseJSON(data: value) {
+                            self.todoItems[item.id] = item
+                        }
+                    }
+                    print(todoItems)
+                } catch {
+                    throw FileCacheError.fileAccessError
+                }
+            })
         }
     }
     
