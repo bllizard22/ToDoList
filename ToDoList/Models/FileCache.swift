@@ -50,16 +50,51 @@ final class FileCache {
     }
     
     func addNewTask(task: TodoItem) {
-        todoItems[task.id] = task
-        networkingService.addTask(task) { data, response, error in
-            print(error)
-            print(response?.statusCode)
-            print(data)
+        if todoItems.keys.contains(task.id) {
+            networkingService.updateTask(task) { data, response, error in
+                if error != nil, response == nil {
+                    return
+                }
+                
+                if let data = data {
+                    let itemRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? Any
+                    guard let item = itemRaw else { return }
+                    let json = TodoItem.parseJSON(data: item)
+                    print("Data:\n", json)
+                }
+            }
+        } else {
+            networkingService.addTask(task) { data, response, error in
+                if error != nil, response == nil {
+                    return
+                }
+                
+                if let data = data {
+                    let itemRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? Any
+                    guard let item = itemRaw else { return }
+                    let json = TodoItem.parseJSON(data: item)
+                    print("Data:\n", json)
+                }
+            }
         }
+        
+        todoItems[task.id] = task
     }
     
     func removeTask(withId id: String) {
         todoItems.removeValue(forKey: id)
+        networkingService.deleteTask(withId: id, completion: { data, response, error in
+            if error != nil, response == nil {
+                return
+            }
+            
+            if let data = data {
+                let itemRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? Any
+                guard let item = itemRaw else { return }
+                let json = TodoItem.parseJSON(data: item)
+                print("Data:\n", json)
+            }
+        })
     }
     
     func saveToFile() throws {
@@ -108,14 +143,12 @@ final class FileCache {
                     let fileContent = try Data(contentsOf: filePath, options: [])
                     print("Content of the file is: \(fileContent)")
                     let jsonRaw = try JSONSerialization.jsonObject(with: fileContent, options: .allowFragments) as? [String: Any]
-                    print(jsonRaw ?? "empty json")
                     guard let json = jsonRaw else { return }
                     for value in json.values {
                         if let item = TodoItem.parseJSON(data: value) {
                             self.todoItems[item.id] = item
                         }
                     }
-                    print(todoItems)
                 } catch {
                     throw FileCacheError.fileAccessError
                 }

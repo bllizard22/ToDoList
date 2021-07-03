@@ -12,9 +12,9 @@ protocol NetworkingService {
     
     func addTask(_ task: TodoItem, completion: @escaping (Data?, HTTPURLResponse?, Error?) -> Void)
     
-    func updateTask(_ task: TodoItem, completion: @escaping (Data?, Error?) -> TodoItem)
+    func updateTask(_ task: TodoItem, completion: @escaping (Data?, HTTPURLResponse?, Error?) -> Void)
     
-    func deleteTask(withId id: String, completion: @escaping (Data?, Error?) -> TodoItem)
+    func deleteTask(withId id: String, completion: @escaping (Data?, HTTPURLResponse?, Error?) -> Void)
     
-    func syncTasks(deleted: [String], modified: [TodoItem], completion: @escaping (Data?, Error?) -> [TodoItem])
+    func syncTasks(deleted: [String], modified: [TodoItem], completion: @escaping (Data?, HTTPURLResponse?, Error?) -> Void)
 }
