@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		293D560E856EBD3FEB6951C6 /* Pods_ToDoList_ToDoListUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D63F2063E8D745A1767B6F /* Pods_ToDoList_ToDoListUITests.framework */; };
 		4108CB9B4E3E2AEF0E2B5C7E /* Pods_ToDoListTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05277A8968B6BB0A648D7F6B /* Pods_ToDoListTests.framework */; };
+		854C13E22691B52000DEF4A2 /* NetworkingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854C13E12691B52000DEF4A2 /* NetworkingService.swift */; };
+		854C13E42691B8FB00DEF4A2 /* DefaultNetworkingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854C13E32691B8FB00DEF4A2 /* DefaultNetworkingService.swift */; };
 		8551DD7B267DF7CD0050C0E1 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8551DD79267DF7CD0050C0E1 /* TaskTableViewCell.swift */; };
 		8551DD7C267DF7CD0050C0E1 /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8551DD7A267DF7CD0050C0E1 /* TaskTableViewCell.xib */; };
 		8551DD81267DFE750050C0E1 /* TasksTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8551DD80267DFE750050C0E1 /* TasksTableView.swift */; };
@@ -56,6 +58,8 @@
 		5B2AE54927D927325AC83B7B /* Pods-ToDoList-ToDoListUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ToDoListUITests.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		62D63F2063E8D745A1767B6F /* Pods_ToDoList_ToDoListUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList_ToDoListUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FA6D18557EE9DBB1AB7DB4B /* Pods-ToDoList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList.release.xcconfig"; path = "Target Support Files/Pods-ToDoList/Pods-ToDoList.release.xcconfig"; sourceTree = "<group>"; };
+		854C13E12691B52000DEF4A2 /* NetworkingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingService.swift; sourceTree = "<group>"; };
+		854C13E32691B8FB00DEF4A2 /* DefaultNetworkingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNetworkingService.swift; sourceTree = "<group>"; };
 		8551DD79267DF7CD0050C0E1 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		8551DD7A267DF7CD0050C0E1 /* TaskTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTableViewCell.xib; sourceTree = "<group>"; };
 		8551DD80267DFE750050C0E1 /* TasksTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksTableView.swift; sourceTree = "<group>"; };
@@ -209,6 +213,8 @@
 				8552D551266FD55300C38589 /* FileCache.swift */,
 				8552D549266FC97F00C38589 /* Priority.swift */,
 				8552D5EF2672807300C38589 /* TodoItemJSON.swift */,
+				854C13E12691B52000DEF4A2 /* NetworkingService.swift */,
+				854C13E32691B8FB00DEF4A2 /* DefaultNetworkingService.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -480,6 +486,8 @@
 				8552D5F02672807300C38589 /* TodoItemJSON.swift in Sources */,
 				8552D6492676851A00C38589 /* DetailViewController.swift in Sources */,
 				8552D552266FD55300C38589 /* FileCache.swift in Sources */,
+				854C13E42691B8FB00DEF4A2 /* DefaultNetworkingService.swift in Sources */,
+				854C13E22691B52000DEF4A2 /* NetworkingService.swift in Sources */,
 				8552D41A266CC48400C38589 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

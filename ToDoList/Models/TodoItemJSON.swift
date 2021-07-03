@@ -18,22 +18,40 @@ extension TodoItem {
         
         let deadline = dict["deadline"] as? Date
         
-        let isDone = dict["isDone"] as? Bool ?? false
+        let isDone = dict["done"] as? Bool ?? false
+        
+        let createdAt = dict["created_at"] as? Double ?? Date().timeIntervalSince1970
+        let updatedAt = dict["updated_at"] as? Double ?? createdAt
         
         return self.init(id: id,
                          text: text,
                          importance: importance,
                          deadline: deadline,
-                         isDone: isDone)
+                         isDone: isDone,
+                         created: createdAt,
+                         updated: updatedAt)
     }
     
     var json: [String: Any] {
+        let priority: String
+        switch importance.rawValue {
+        case 0:
+            priority = "low"
+        case 1:
+            priority = "basic"
+        case 2:
+            priority = "important"
+        default:
+            priority = "basic"
+        }
         return [
             "id": id,
             "text": text,
-            "importance": importance.rawValue,
-            "deadline": deadline?.timeIntervalSince1970 as Any,
-            "isDone": isDone
+            "importance": priority,
+            "deadline": deadline?.timeIntervalSince1970 ?? NSNull(),
+            "done": isDone,
+            "created_at": Int(createdAt),
+            "updated_at": Int(updatedAt)
         ]
     }
     

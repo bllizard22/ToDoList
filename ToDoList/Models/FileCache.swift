@@ -21,6 +21,8 @@ final class FileCache {
         self.todoItems.filter { $0.value.isDone }.map { $0.value.id }.sorted()
     }
     
+    let networkingService = DefaultNetworkingService()
+    
     private let fileManager = FileManager()
     private var cacheDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     
@@ -31,10 +33,29 @@ final class FileCache {
     
     func toggleTaskDone(forID id: String) {
         todoItems[id]?.toggleDoneStatus()
+        networkingService.getTasks { data, response, error in
+            if error != nil, response == nil {
+                return
+            }
+            
+            if let data = data {
+                let itemsRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? [Any]
+                guard let items = itemsRaw else { return }
+                for item in items {
+                    let json = TodoItem.parseJSON(data: item)
+                    print("Data:\n", json)
+                }
+            }
+        }
     }
     
     func addNewTask(task: TodoItem) {
         todoItems[task.id] = task
+        networkingService.addTask(task) { data, response, error in
+            print(error)
+            print(response?.statusCode)
+            print(data)
+        }
     }
     
     func removeTask(withId id: String) {

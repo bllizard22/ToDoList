@@ -14,6 +14,9 @@ struct TodoItem {
     let deadline: Date?
     
     var isDone: Bool
+    let createdAt: TimeInterval
+    var updatedAt: TimeInterval
+    var isDirty: Bool
     
     mutating func toggleDoneStatus() {
         isDone = !isDone
@@ -23,12 +26,18 @@ struct TodoItem {
          text: String,
          importance: Priority,
          deadline: Date? = nil,
-         isDone: Bool = false) {
+         isDone: Bool = false,
+         created: TimeInterval = Date().timeIntervalSince1970,
+         updated: TimeInterval = Date().timeIntervalSince1970) {
         self.id = id
         self.text = text
         self.importance = importance
         self.deadline = deadline
         self.isDone = isDone
+    
+        self.createdAt = created
+        self.updatedAt = updated
+        self.isDirty = false
     }
     
     
