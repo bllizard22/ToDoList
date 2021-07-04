@@ -19,9 +19,7 @@ class ViewController: UIViewController {
             return array.filter { !fileCache.doneTasksList.contains($0) }
         }
     }
-//    var doneTasksList: [String] {
-//        return fileCache.todoItems.filter { $0.value.isDone }.map { $0.value.id }.sorted()
-//    }
+
     var doneFlag = false
     
     @IBOutlet private weak var doneLabel: UILabel!
@@ -38,7 +36,7 @@ class ViewController: UIViewController {
         
         buildModel = BuildVersionModel()
         fileCache = FileCache(forFile: "defaultList.txt")
-//        createItems()
+        
         do {
             try fileCache.loadFromFile()
         } catch let error {
@@ -104,27 +102,6 @@ class ViewController: UIViewController {
         alertVC.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
     }
     
-    // MARK: - Create tasks, for debug purposes
-    func createItems() {
-
-        let item = TodoItem(text: "sell smth",
-                            importance: .high,
-                            deadline: Date(timeIntervalSinceNow: 3600*24*7))
-        fileCache.addNewTask(task: item)
-        
-        let item2 = TodoItem(text: "buy smth", importance: .moderate)
-        fileCache.addNewTask(task: item2)
-        
-        let item3 = TodoItem(text: "buy 3 smth", importance: .moderate)
-        fileCache.addNewTask(task: item3)
-        
-        do {
-            try fileCache.saveToFile()
-        } catch {
-            showErrorAlert(forError: FileCacheError.fileAccessError)
-        }
-    }
-    
 }
 
 // MARK: - Extension for TableView methods
@@ -167,7 +144,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let id = tasksList[indexPath.row]
         let floatSize = CGFloat(fileCache.todoItems[id]?.text.components(separatedBy: "\n").count ?? 1)
         let size = (floatSize - 1)  * 20.0 + 56.0
-        return size > 98 ? 98 : size
+        return min(98, size)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -185,7 +162,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     private func doneAction(_ indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal,
                                         title: "",
-                                        handler: { [ weak self ] (_, _, _) in
+                                        handler: { [ weak self ] _, _, _ in
                                             let id = self?.tasksList[indexPath.row] ?? ""
                                             self?.fileCache.toggleTaskDone(forID: id)
                                             self?.taskTableView.reloadData()
@@ -201,7 +178,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     private func deleteAction(_ indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .normal,
                                         title: "",
-                                        handler: { [ weak self ] (_, _, _) in
+                                        handler: { [ weak self ] _, _, _ in
                                             let id = self?.tasksList[indexPath.row] ?? ""
                                             self?.fileCache.removeTask(withId: id)
                                             self?.taskTableView.reloadData()

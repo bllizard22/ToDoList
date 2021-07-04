@@ -14,15 +14,7 @@ extension TodoItem {
         guard let id = dict["id"] as? String else { return nil }
         guard let text = dict["text"] as? String else { return nil }
         
-        var importance: Priority
-        switch dict["importance"] as? Int ?? 1 {
-        case 0:
-            importance = Priority.low
-        case 2:
-            importance = Priority.high
-        default:
-            importance = Priority.moderate
-        }
+        let importance = (dict["importance"] as? Int).flatMap(Priority.init(rawValue:)) ?? .moderate
         
         let deadline = dict["deadline"] as? Date
         

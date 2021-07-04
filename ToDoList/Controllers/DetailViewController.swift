@@ -54,16 +54,8 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     private func loadItem() {
         guard let item = currentItem else { return }
         textView.text = item.text
-        var index: Int
-        switch item.importance {
-        case .low:
-            index = 0
-        case .high:
-            index = 2
-        default:
-            index = 1
-        }
-        importanceSegmets.selectedSegmentIndex = index
+        importanceSegmets.selectedSegmentIndex = item.importance.rawValue
+        
         if item.deadline != nil {
             deadlineSwitch.isOn = true
             showDeadlinePicker()
@@ -80,15 +72,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         let text = textView.text
         
         if currentItem == nil {
-            var importance: Priority
-            switch importanceSegmets.selectedSegmentIndex {
-            case 0:
-                importance = .low
-            case 2:
-                importance = .high
-            default:
-                importance = .moderate
-            }
+            let importance = Priority(rawValue: importanceSegmets.selectedSegmentIndex) ?? .moderate
             
             let deadline = deadlineSwitch.isOn ? deadlinePicker.date : nil
             
