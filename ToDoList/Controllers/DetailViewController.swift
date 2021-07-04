@@ -71,20 +71,22 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     @IBAction private func saveTask(_ sender: UIBarButtonItem) {
         let text = textView.text
         
-        if currentItem == nil {
+        if let currentItem = currentItem {
+            let item = TodoItem(id: currentItem.id,
+                                text: textView.text,
+                                importance: Priority(rawValue: importanceSegmets.selectedSegmentIndex)!,
+                                deadline: deadlineSwitch.isOn ? deadlinePicker.date : nil,
+                                isDone: currentItem.isDone)
+            rootVC?.fileCache.addNewTask(task: item)
+
+        } else {
             let importance = Priority(rawValue: importanceSegmets.selectedSegmentIndex) ?? .moderate
-            
+
             let deadline = deadlineSwitch.isOn ? deadlinePicker.date : nil
-            
+
             let item: TodoItem = TodoItem(text: text ?? "",
                                           importance: importance,
                                           deadline: deadline)
-            rootVC?.fileCache.addNewTask(task: item)
-        } else {
-            let item = TodoItem(id: currentItem!.id,
-                                text: textView.text,
-                                importance: Priority(rawValue: importanceSegmets.selectedSegmentIndex)!,
-                                deadline: deadlineSwitch.isOn ? deadlinePicker.date : nil)
             rootVC?.fileCache.addNewTask(task: item)
         }
         

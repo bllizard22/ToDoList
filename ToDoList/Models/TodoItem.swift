@@ -22,13 +22,22 @@ struct TodoItem {
         isDone = !isDone
     }
     
+    mutating func updateDate() {
+        updatedAt = Date().timeIntervalSince1970
+    }
+    
+    mutating func toggleDirtyState() {
+        isDirty = !isDirty
+    }
+    
     init(id: String = UUID().uuidString,
          text: String,
          importance: Priority,
          deadline: Date? = nil,
          isDone: Bool = false,
          created: TimeInterval = Date().timeIntervalSince1970,
-         updated: TimeInterval = Date().timeIntervalSince1970) {
+         updated: TimeInterval = Date().timeIntervalSince1970,
+         isDirty: Bool = false) {
         self.id = id
         self.text = text
         self.importance = importance

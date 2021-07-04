@@ -39,6 +39,7 @@ class ViewController: UIViewController {
         
         do {
             try fileCache.loadFromFile()
+            taskTableView.reloadData()
         } catch let error {
             showErrorAlert(forError: error)
         }

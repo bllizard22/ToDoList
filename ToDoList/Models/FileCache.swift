@@ -33,47 +33,21 @@ final class FileCache {
     
     func toggleTaskDone(forID id: String) {
         todoItems[id]?.toggleDoneStatus()
-        networkingService.getTasks { data, response, error in
-            if error != nil, response == nil {
-                return
-            }
-            
-            if let data = data {
-                let itemsRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? [Any]
-                guard let items = itemsRaw else { return }
-                for item in items {
-                    let json = TodoItem.parseJSON(data: item)
-                    print("Data:\n", json)
-                }
-            }
-        }
     }
     
     func addNewTask(task: TodoItem) {
         if todoItems.keys.contains(task.id) {
-            networkingService.updateTask(task) { data, response, error in
-                if error != nil, response == nil {
+            networkingService.updateTask(task) { _, response, error in
+                if error != nil, response == nil, !task.isDirty {
+                    self.todoItems[task.id]?.toggleDirtyState()
                     return
-                }
-                
-                if let data = data {
-                    let itemRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? Any
-                    guard let item = itemRaw else { return }
-                    let json = TodoItem.parseJSON(data: item)
-                    print("Data:\n", json)
                 }
             }
         } else {
-            networkingService.addTask(task) { data, response, error in
-                if error != nil, response == nil {
+            networkingService.addTask(task) { _, response, error in
+                if error != nil, response == nil, !task.isDirty {
+                    self.todoItems[task.id]?.toggleDirtyState()
                     return
-                }
-                
-                if let data = data {
-                    let itemRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? Any
-                    guard let item = itemRaw else { return }
-                    let json = TodoItem.parseJSON(data: item)
-                    print("Data:\n", json)
                 }
             }
         }
@@ -83,16 +57,10 @@ final class FileCache {
     
     func removeTask(withId id: String) {
         todoItems.removeValue(forKey: id)
-        networkingService.deleteTask(withId: id, completion: { data, response, error in
+        networkingService.deleteTask(withId: id, completion: { _, response, error in
             if error != nil, response == nil {
+                self.todoItems[id]?.toggleDirtyState()
                 return
-            }
-            
-            if let data = data {
-                let itemRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? Any
-                guard let item = itemRaw else { return }
-                let json = TodoItem.parseJSON(data: item)
-                print("Data:\n", json)
             }
         })
     }
@@ -153,6 +121,34 @@ final class FileCache {
                     throw FileCacheError.fileAccessError
                 }
             })
+        }
+        syncWithServer()
+    }
+
+    private func syncWithServer() {
+        networkingService.getTasks { data, response, error in
+            if error != nil, response == nil {
+                return
+            }
+            
+            if let data = data {
+                let itemsRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? [Any]
+                guard let items = itemsRaw else { return }
+                let remoteItems = items.compactMap { TodoItem.parseJSON(data: $0) }
+                let remoteIds = remoteItems.map { $0.id }
+                
+                for item in remoteItems {
+                    if !self.todoItems.keys.contains(item.id) {
+                        self.addNewTask(task: item)
+                    }
+                }
+                
+                for id in self.todoItems.keys {
+                    if !remoteIds.contains(id) {
+                        self.removeTask(withId: id)
+                    }
+                }
+            }
         }
     }
     
