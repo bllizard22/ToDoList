@@ -14,22 +14,17 @@ extension TodoItem {
         guard let id = dict["id"] as? String else { return nil }
         guard let text = dict["text"] as? String else { return nil }
         
-        var importance: Priority
-        switch dict["importance"] as? Int ?? 1 {
-        case 0:
-            importance = Priority.low
-        case 2:
-            importance = Priority.high
-        default:
-            importance = Priority.moderate
-        }
+        let importance = (dict["importance"] as? Int).flatMap(Priority.init(rawValue:)) ?? .moderate
         
         let deadline = dict["deadline"] as? Date
+        
+        let isDone = dict["isDone"] as? Bool ?? false
         
         return self.init(id: id,
                          text: text,
                          importance: importance,
-                         deadline: deadline)
+                         deadline: deadline,
+                         isDone: isDone)
     }
     
     var json: [String: Any] {
@@ -37,7 +32,8 @@ extension TodoItem {
             "id": id,
             "text": text,
             "importance": importance.rawValue,
-            "deadline": deadline?.timeIntervalSince1970 as Any
+            "deadline": deadline?.timeIntervalSince1970 as Any,
+            "isDone": isDone
         ]
     }
     

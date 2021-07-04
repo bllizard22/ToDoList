@@ -16,10 +16,10 @@ final class FileCache {
     
     private var fileName: String
     private(set) var todoItems: [String: TodoItem]
-//    private var doneTasksList = [String]()
-//    var doneTodoItems: [String: TodoItem] {
-//        return todoItems.filter { doneTasksList.contains($0.value.id) }
-//    }
+    
+    var doneTasksList: [String] {
+        self.todoItems.filter { $0.value.isDone }.map { $0.value.id }.sorted()
+    }
     
     private let fileManager = FileManager()
     private var cacheDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
@@ -27,6 +27,10 @@ final class FileCache {
     init(forFile: String) {
         self.todoItems = [String: TodoItem]()
         self.fileName = forFile
+    }
+    
+    func toggleTaskDone(forID id: String) {
+        todoItems[id]?.toggleDoneStatus()
     }
     
     func addNewTask(task: TodoItem) {
