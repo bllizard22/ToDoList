@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PriorityEnum
 
 class DetailViewController: UIViewController, UITextViewDelegate {
 

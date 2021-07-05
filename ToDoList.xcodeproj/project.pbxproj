@@ -27,7 +27,6 @@
 		8552D51B266CE25900C38589 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8552D519266CE25900C38589 /* Localizable.strings */; };
 		8552D51E266CE25900C38589 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8552D51C266CE25900C38589 /* InfoPlist.strings */; };
 		8552D545266FC94200C38589 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552D544266FC94200C38589 /* TodoItem.swift */; };
-		8552D54A266FC97F00C38589 /* Priority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552D549266FC97F00C38589 /* Priority.swift */; };
 		8552D552266FD55300C38589 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552D551266FD55300C38589 /* FileCache.swift */; };
 		8552D5F02672807300C38589 /* TodoItemJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552D5EF2672807300C38589 /* TodoItemJSON.swift */; };
 		8552D6492676851A00C38589 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552D6482676851A00C38589 /* DetailViewController.swift */; };
@@ -48,6 +47,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8552D413266CC48300C38589;
 			remoteInfo = ToDoList;
+		};
+		8581AB5A2692C6E600F576D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8581AB552692C6E600F576D9 /* PriorityEnum.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 85689B552692C27E00C5A564;
+			remoteInfo = PriorityEnum;
+		};
+		8581AB5C2692C6E600F576D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8581AB552692C6E600F576D9 /* PriorityEnum.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 85689B5E2692C27F00C5A564;
+			remoteInfo = PriorityEnumTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -83,10 +96,12 @@
 		8552D51A266CE25900C38589 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8552D51D266CE25900C38589 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8552D544266FC94200C38589 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
-		8552D549266FC97F00C38589 /* Priority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Priority.swift; sourceTree = "<group>"; };
 		8552D551266FD55300C38589 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
 		8552D5EF2672807300C38589 /* TodoItemJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemJSON.swift; sourceTree = "<group>"; };
 		8552D6482676851A00C38589 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		8581AB532692C6C900F576D9 /* PriorityEnum */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PriorityEnum; sourceTree = "<group>"; };
+		8581AB542692C6D600F576D9 /* PriorityEnum */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PriorityEnum; path = PriorityEnum/PriorityEnum; sourceTree = "<group>"; };
+		8581AB552692C6E600F576D9 /* PriorityEnum.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PriorityEnum.xcodeproj; path = PriorityEnum/PriorityEnum.xcodeproj; sourceTree = "<group>"; };
 		8F6C1B77DB00C6484374F41E /* Pods-ToDoListTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoListTests.release.xcconfig"; path = "Target Support Files/Pods-ToDoListTests/Pods-ToDoListTests.release.xcconfig"; sourceTree = "<group>"; };
 		BE0D2756CC10AAAA79E4B02B /* Pods-ToDoListTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoListTests.debug.xcconfig"; path = "Target Support Files/Pods-ToDoListTests/Pods-ToDoListTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BECFEF20F54867C9253B8FA7 /* Pods-ToDoList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList/Pods-ToDoList.debug.xcconfig"; sourceTree = "<group>"; };
@@ -211,7 +226,6 @@
 				8552D4A8266CD41100C38589 /* BuildModel.swift */,
 				8552D544266FC94200C38589 /* TodoItem.swift */,
 				8552D551266FD55300C38589 /* FileCache.swift */,
-				8552D549266FC97F00C38589 /* Priority.swift */,
 				8552D5EF2672807300C38589 /* TodoItemJSON.swift */,
 				854C13E12691B52000DEF4A2 /* NetworkingService.swift */,
 				854C13E32691B8FB00DEF4A2 /* DefaultNetworkingService.swift */,
@@ -228,9 +242,21 @@
 			path = Localization;
 			sourceTree = "<group>";
 		};
+		8581AB562692C6E600F576D9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8581AB5B2692C6E600F576D9 /* PriorityEnum.framework */,
+				8581AB5D2692C6E600F576D9 /* PriorityEnumTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		9EC14C80709BF9DADD27885E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8581AB552692C6E600F576D9 /* PriorityEnum.xcodeproj */,
+				8581AB532692C6C900F576D9 /* PriorityEnum */,
+				8581AB542692C6D600F576D9 /* PriorityEnum */,
 				161E63E54BF65DB35D886AE3 /* Pods_ToDoList.framework */,
 				62D63F2063E8D745A1767B6F /* Pods_ToDoList_ToDoListUITests.framework */,
 				05277A8968B6BB0A648D7F6B /* Pods_ToDoListTests.framework */,
@@ -263,6 +289,7 @@
 				8552D410266CC48300C38589 /* Sources */,
 				8552D411266CC48300C38589 /* Frameworks */,
 				8552D412266CC48300C38589 /* Resources */,
+				ACD6F5DFA578A2139F9915AA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -300,6 +327,7 @@
 				8552D431266CC49500C38589 /* Sources */,
 				8552D432266CC49500C38589 /* Frameworks */,
 				8552D433266CC49500C38589 /* Resources */,
+				6E8709546A7C7EB1AECE539F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -345,6 +373,12 @@
 			mainGroup = 8552D40B266CC48300C38589;
 			productRefGroup = 8552D415266CC48300C38589 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 8581AB562692C6E600F576D9 /* Products */;
+					ProjectRef = 8581AB552692C6E600F576D9 /* PriorityEnum.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8552D413266CC48300C38589 /* ToDoList */,
@@ -353,6 +387,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		8581AB5B2692C6E600F576D9 /* PriorityEnum.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PriorityEnum.framework;
+			remoteRef = 8581AB5A2692C6E600F576D9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8581AB5D2692C6E600F576D9 /* PriorityEnumTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PriorityEnumTests.xctest;
+			remoteRef = 8581AB5C2692C6E600F576D9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8552D412266CC48300C38589 /* Resources */ = {
@@ -407,6 +458,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		6E8709546A7C7EB1AECE539F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		852FC926ACFA43B54199AF1E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -446,6 +514,23 @@
 			shellPath = /bin/sh;
 			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
+		ACD6F5DFA578A2139F9915AA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoList/Pods-ToDoList-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoList/Pods-ToDoList-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ToDoList/Pods-ToDoList-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F707D5B5C3398CE6BFD1068C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -479,7 +564,6 @@
 				8552D4A9266CD41100C38589 /* BuildModel.swift in Sources */,
 				8552D41C266CC48400C38589 /* ViewController.swift in Sources */,
 				8551DD7B267DF7CD0050C0E1 /* TaskTableViewCell.swift in Sources */,
-				8552D54A266FC97F00C38589 /* Priority.swift in Sources */,
 				8552D49D266CD1DF00C38589 /* IconImageView.swift in Sources */,
 				8552D418266CC48400C38589 /* AppDelegate.swift in Sources */,
 				8552D545266FC94200C38589 /* TodoItem.swift in Sources */,

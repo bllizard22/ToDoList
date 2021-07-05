@@ -8,6 +8,8 @@ target 'ToDoList' do
   # Pods for ToDoList
   pod 'SwiftLint'
 
+  pod 'PriorityEnum', :path => 'PriorityEnum/'
+
   target 'ToDoListTests' do
     inherit! :search_paths
     # Pods for testing

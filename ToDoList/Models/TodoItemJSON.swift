@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PriorityEnum
 
 extension TodoItem {
     

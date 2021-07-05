@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PriorityEnum
 
 struct TodoItem {
     let id: String
