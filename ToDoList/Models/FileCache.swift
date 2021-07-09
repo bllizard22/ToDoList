@@ -21,6 +21,8 @@ final class FileCache {
         self.todoItems.filter { $0.value.isDone }.map { $0.value.id }.sorted()
     }
     
+    let networkingService = DefaultNetworkingService()
+    
     private let fileManager = FileManager()
     private var cacheDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     
@@ -34,11 +36,33 @@ final class FileCache {
     }
     
     func addNewTask(task: TodoItem) {
+        if todoItems.keys.contains(task.id) {
+            networkingService.updateTask(task) { _, response, error in
+                if error != nil, response == nil, !task.isDirty {
+                    self.todoItems[task.id]?.toggleDirtyState()
+                    return
+                }
+            }
+        } else {
+            networkingService.addTask(task) { _, response, error in
+                if error != nil, response == nil, !task.isDirty {
+                    self.todoItems[task.id]?.toggleDirtyState()
+                    return
+                }
+            }
+        }
+        
         todoItems[task.id] = task
     }
     
     func removeTask(withId id: String) {
         todoItems.removeValue(forKey: id)
+        networkingService.deleteTask(withId: id, completion: { _, response, error in
+            if error != nil, response == nil {
+                self.todoItems[id]?.toggleDirtyState()
+                return
+            }
+        })
     }
     
     func saveToFile() throws {
@@ -87,18 +111,44 @@ final class FileCache {
                     let fileContent = try Data(contentsOf: filePath, options: [])
                     print("Content of the file is: \(fileContent)")
                     let jsonRaw = try JSONSerialization.jsonObject(with: fileContent, options: .allowFragments) as? [String: Any]
-                    print(jsonRaw ?? "empty json")
                     guard let json = jsonRaw else { return }
                     for value in json.values {
                         if let item = TodoItem.parseJSON(data: value) {
                             self.todoItems[item.id] = item
                         }
                     }
-                    print(todoItems)
                 } catch {
                     throw FileCacheError.fileAccessError
                 }
             })
+        }
+        syncWithServer()
+    }
+
+    private func syncWithServer() {
+        networkingService.getTasks { data, response, error in
+            if error != nil, response == nil {
+                return
+            }
+            
+            guard let data = data else { return }
+
+            let itemsRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? [Any]
+            guard let items = itemsRaw else { return }
+            let remoteItems = items.compactMap { TodoItem.parseJSON(data: $0) }
+            let remoteIds = remoteItems.map { $0.id }
+
+            for item in remoteItems {
+                if !self.todoItems.keys.contains(item.id) {
+                    self.addNewTask(task: item)
+                }
+            }
+
+            for id in self.todoItems.keys {
+                if !remoteIds.contains(id) {
+                    self.removeTask(withId: id)
+                }
+            }
         }
     }
     
