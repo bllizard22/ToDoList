@@ -8,7 +8,10 @@
 import Foundation
 
 class DefaultNetworkingService: NetworkingService {
-    
+
+    let yandexBackendURL = "https://d5dps3h13rv6902lp5c8.apigw.yandexcloud.net/tasks/"
+    let bearerToken = "Bearer ODgwNDE2NDI4ODExNzM4MTY0MQ"
+
     func getTasks(completion: @escaping (Data?, HTTPURLResponse?, Error?) -> Void) {
         let session: URLSession = {
             let session = URLSession(configuration: .default)
@@ -16,9 +19,9 @@ class DefaultNetworkingService: NetworkingService {
             return session
         }()
         
-        var request = URLRequest(url: URL(string: "https://d5dps3h13rv6902lp5c8.apigw.yandexcloud.net/tasks/")!)
+        var request = URLRequest(url: URL(string: yandexBackendURL)!)
         request.httpMethod = "GET"
-        request.allHTTPHeaderFields = ["Authorization": "Bearer ODgwNDE2NDI4ODExNzM4MTY0MQ"]
+        request.allHTTPHeaderFields = ["Authorization": bearerToken]
         
         let dataTask = session.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -39,11 +42,11 @@ class DefaultNetworkingService: NetworkingService {
             session.configuration.timeoutIntervalForRequest = 30.0
             return session
         }()
-        let url = URL(string: "https://d5dps3h13rv6902lp5c8.apigw.yandexcloud.net/tasks/")!
+        let url = URL(string: yandexBackendURL)!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = ["Content-Type": "application/json",
-                                       "Authorization": "Bearer ODgwNDE2NDI4ODExNzM4MTY0MQ"]
+                                       "Authorization": bearerToken]
         request.httpBody = try? JSONSerialization.data(withJSONObject: task.json, options: [])
         
         let dataTask = session.dataTask(with: request) { data, response, error in
@@ -67,11 +70,11 @@ class DefaultNetworkingService: NetworkingService {
             session.configuration.timeoutIntervalForRequest = 30.0
             return session
         }()
-        let url = URL(string: "https://d5dps3h13rv6902lp5c8.apigw.yandexcloud.net/tasks/" + task.id)!
+        let url = URL(string: yandexBackendURL + task.id)!
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.allHTTPHeaderFields = ["Content-Type": "application/json",
-                                       "Authorization": "Bearer ODgwNDE2NDI4ODExNzM4MTY0MQ"]
+                                       "Authorization": bearerToken]
         request.httpBody = try? JSONSerialization.data(withJSONObject: task.json, options: [])
         
         let dataTask = session.dataTask(with: request) { data, response, error in
@@ -95,10 +98,10 @@ class DefaultNetworkingService: NetworkingService {
             session.configuration.timeoutIntervalForRequest = 30.0
             return session
         }()
-        let url = URL(string: "https://d5dps3h13rv6902lp5c8.apigw.yandexcloud.net/tasks/" + id)!
+        let url = URL(string: yandexBackendURL + id)!
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
-        request.allHTTPHeaderFields = ["Authorization": "Bearer ODgwNDE2NDI4ODExNzM4MTY0MQ"]
+        request.allHTTPHeaderFields = ["Authorization": bearerToken]
         
         let dataTask = session.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -121,11 +124,11 @@ class DefaultNetworkingService: NetworkingService {
             session.configuration.timeoutIntervalForRequest = 30.0
             return session
         }()
-        let url = URL(string: "https://d5dps3h13rv6902lp5c8.apigw.yandexcloud.net/tasks/")!
+        let url = URL(string: yandexBackendURL)!
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.allHTTPHeaderFields = ["Content-Type": "application/json",
-                                       "Authorization": "Bearer ODgwNDE2NDI4ODExNzM4MTY0MQ"]
+                                       "Authorization": bearerToken]
         
         let json: [String: Any] = ["deleted": deleted, "other": modified]
         request.httpBody = try? JSONSerialization.data(withJSONObject: json, options: [])

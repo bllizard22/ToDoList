@@ -131,22 +131,22 @@ final class FileCache {
                 return
             }
             
-            if let data = data {
-                let itemsRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? [Any]
-                guard let items = itemsRaw else { return }
-                let remoteItems = items.compactMap { TodoItem.parseJSON(data: $0) }
-                let remoteIds = remoteItems.map { $0.id }
-                
-                for item in remoteItems {
-                    if !self.todoItems.keys.contains(item.id) {
-                        self.addNewTask(task: item)
-                    }
+            guard let data = data else { return }
+
+            let itemsRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? [Any]
+            guard let items = itemsRaw else { return }
+            let remoteItems = items.compactMap { TodoItem.parseJSON(data: $0) }
+            let remoteIds = remoteItems.map { $0.id }
+
+            for item in remoteItems {
+                if !self.todoItems.keys.contains(item.id) {
+                    self.addNewTask(task: item)
                 }
-                
-                for id in self.todoItems.keys {
-                    if !remoteIds.contains(id) {
-                        self.removeTask(withId: id)
-                    }
+            }
+
+            for id in self.todoItems.keys {
+                if !remoteIds.contains(id) {
+                    self.removeTask(withId: id)
                 }
             }
         }

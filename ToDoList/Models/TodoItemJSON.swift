@@ -45,14 +45,6 @@ extension TodoItem {
             priority = "basic"
         }
 
-//        var deadlineInt: Int
-//        if deadline != nil {
-//            let deadlineDouble = deadline?.timeIntervalSince1970
-//            deadlineInt = Int(deadlineDouble)
-//        } else {
-//            deadlineInt = NSNull()
-//        }
-
         return [
             "id": id,
             "text": text,
