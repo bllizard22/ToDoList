@@ -78,7 +78,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
                                 importance: Priority(rawValue: importanceSegmets.selectedSegmentIndex)!,
                                 deadline: deadlineSwitch.isOn ? deadlinePicker.date : nil,
                                 isDone: currentItem.isDone)
-            rootVC?.fileCache.addNewTask(task: item)
+            rootVC?.fileCache.updateTask(item, needToToggleDone: false)
 
         } else {
             let importance = Priority(rawValue: importanceSegmets.selectedSegmentIndex) ?? .moderate
@@ -88,9 +88,9 @@ class DetailViewController: UIViewController, UITextViewDelegate {
             let item: TodoItem = TodoItem(text: text ?? "",
                                           importance: importance,
                                           deadline: deadline)
-            rootVC?.fileCache.addNewTask(task: item)
+            rootVC?.fileCache.addNewTask(item)
         }
-        
+
         closeDetailVC()
     }
     
@@ -137,7 +137,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     
     private func closeDetailVC() {
         dismiss(animated: true) { [ weak self ] in
-            self?.rootVC?.taskTableView.reloadData()
+            self?.rootVC?.reloadTasksTableView()
         }
     }
 }

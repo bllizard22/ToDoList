@@ -10,13 +10,13 @@ target 'ToDoList' do
 
   pod 'PriorityEnum', :path => 'PriorityEnum/'
 
+  pod 'SQLite.swift', '~> 0.12.0'
+
   target 'ToDoListTests' do
     inherit! :search_paths
-    # Pods for testing
   end
 
   target 'ToDoListUITests' do
-    # Pods for testing
   end
 
 end

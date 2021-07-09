@@ -25,18 +25,21 @@ class ViewController: UIViewController {
     
     @IBOutlet private weak var doneLabel: UILabel!
     @IBOutlet private weak var showDoneButton: UIButton!
-    @IBOutlet weak var taskTableView: UITableView!
-        
+    @IBOutlet private weak var taskTableView: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        activityIndicator.startAnimating()
+        activityIndicator.isHidden = false
         taskTableView.delegate = self
         taskTableView.dataSource = self
         taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil),
                                forCellReuseIdentifier: "taskCell")
         
         buildModel = BuildVersionModel()
-        fileCache = FileCache(forFile: "defaultList.txt")
+        fileCache = FileCache(forFile: "defaultList.txt", delegate: self)
         
         do {
             try fileCache.loadFromFile()
@@ -69,6 +72,15 @@ class ViewController: UIViewController {
         } catch let error {
             showErrorAlert(forError: error)
         }
+    }
+
+    func reloadTasksTableView() {
+        taskTableView.reloadData()
+    }
+
+    func stopActivityIndicator() {
+        activityIndicator.stopAnimating()
+        activityIndicator.isHidden = true
     }
     
     // MARK: - IBActions
@@ -166,7 +178,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                                         title: "",
                                         handler: { [ weak self ] _, _, _ in
                                             let id = self?.tasksList[indexPath.row] ?? ""
-                                            self?.fileCache.toggleTaskDone(forID: id)
+                                            if let task = self?.fileCache.todoItems[id] {
+                                                self?.fileCache.updateTask(task, needToToggleDone: true)
+                                            }
                                             self?.taskTableView.reloadData()
                                         }
         )

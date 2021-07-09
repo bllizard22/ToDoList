@@ -15,9 +15,13 @@ extension TodoItem {
         guard let id = dict["id"] as? String else { return nil }
         guard let text = dict["text"] as? String else { return nil }
         
-        let importance = (dict["importance"] as? Int).flatMap(Priority.init(rawValue:)) ?? .moderate
+        let importance = (dict["importance"] as? String).flatMap(Priority.init(value:)) ?? .moderate
         
-        let deadline = dict["deadline"] as? Date
+        let deadlineTimestamp = dict["deadline"] as? TimeInterval
+        var deadline: Date?
+        if deadlineTimestamp != nil {
+            deadline = Date(timeIntervalSince1970: deadlineTimestamp!)
+        }
         
         let isDone = dict["done"] as? Bool ?? false
         
@@ -46,11 +50,19 @@ extension TodoItem {
             priority = "basic"
         }
 
+        let deadlineTimestamp = deadline?.timeIntervalSince1970
+        let deadlineVal : Any
+        if deadlineTimestamp != nil {
+            deadlineVal = deadlineTimestamp!
+        } else {
+            deadlineVal = NSNull()
+        }
+
         return [
             "id": id,
             "text": text,
             "importance": priority,
-            "deadline": Int(Date().timeIntervalSince1970),
+            "deadline": deadlineVal,
             "done": isDone,
             "created_at": Int(createdAt),
             "updated_at": Int(updatedAt)
