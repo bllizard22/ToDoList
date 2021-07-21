@@ -10,7 +10,6 @@ import PriorityEnum
 
 class ViewController: UIViewController {
 
-    var buildModel: BuildVersionModel!
     var fileCache: FileCache!
     var tasksList: [String] {
         if doneFlag {
@@ -38,7 +37,6 @@ class ViewController: UIViewController {
         taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil),
                                forCellReuseIdentifier: "taskCell")
         
-        buildModel = BuildVersionModel()
         fileCache = FileCache(forFile: "defaultList.txt", delegate: self)
         
         do {
@@ -108,6 +106,8 @@ class ViewController: UIViewController {
             } else {
                 topVC.currentItem = nil
             }
+            topVC.fileCache = fileCache
+            topVC.rootVC = self
         }
     }
     
