@@ -12,7 +12,7 @@ public enum Priority: Int {
 }
 
 extension Priority {
-    public init?(value: String) {
+    public init(value: String) {
         switch value.lowercased() {
         case "low":
             self = .low
