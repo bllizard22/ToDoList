@@ -10,7 +10,6 @@ import PriorityEnum
 
 class ViewController: UIViewController {
 
-    var buildModel: BuildVersionModel!
     var fileCache: FileCache!
     var tasksList: [String] {
         if doneFlag {
@@ -38,21 +37,24 @@ class ViewController: UIViewController {
         taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil),
                                forCellReuseIdentifier: "taskCell")
         
-        buildModel = BuildVersionModel()
-        fileCache = FileCache(forFile: "defaultList.txt", delegate: self)
-        
-        do {
-            try fileCache.loadFromFile()
-            taskTableView.reloadData()
-        } catch let error {
-            showErrorAlert(forError: error)
-        }
+        loadFileCache()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
         do {
             try fileCache.saveToFile()
+        } catch let error {
+            showErrorAlert(forError: error)
+        }
+    }
+
+    func loadFileCache() {
+        fileCache = FileCache(forFile: "defaultList.txt", delegate: self)
+
+        do {
+            try fileCache.loadFromFile()
+            taskTableView.reloadData()
         } catch let error {
             showErrorAlert(forError: error)
         }
@@ -82,11 +84,15 @@ class ViewController: UIViewController {
         activityIndicator.stopAnimating()
         activityIndicator.isHidden = true
     }
+
+    func toggleDoneFlag() {
+        doneFlag = !doneFlag
+    }
     
     // MARK: - IBActions
     
     @IBAction func doneButtonDidPressed(_ sender: UIButton) {
-        doneFlag = !doneFlag
+        toggleDoneFlag()
         taskTableView.reloadData()
         if doneFlag {
             showDoneButton.setTitle("Hide", for: .normal)
@@ -108,6 +114,8 @@ class ViewController: UIViewController {
             } else {
                 topVC.currentItem = nil
             }
+            topVC.fileCache = fileCache
+            topVC.rootVC = self
         }
     }
     
