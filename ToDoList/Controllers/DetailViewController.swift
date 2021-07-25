@@ -17,6 +17,9 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     var detailPresenter: DetailPresenter!
     
     var deadlinePicker: UIDatePicker!
+    var isSaveEnabled: Bool {
+        textView.text != nil && textView.text != "" && textView.text != currentItem?.text
+    }
     
     @IBOutlet private weak var saveButton: UIBarButtonItem!
     @IBOutlet private weak var textView: UITextView!
@@ -82,7 +85,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        saveButton.isEnabled = textView.text != nil && textView.text != ""
+        saveButton.isEnabled = isSaveEnabled
     }
     
     func showDeadlinePicker() {
