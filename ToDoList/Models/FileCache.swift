@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SQLite
 
 enum FileCacheError: Error {
     case parsingError
@@ -16,33 +17,43 @@ final class FileCache {
     
     private var fileName: String
     private(set) var todoItems: [String: TodoItem]
+    private(set) weak var delegate: ViewController?
     
     var doneTasksList: [String] {
         self.todoItems.filter { $0.value.isDone }.map { $0.value.id }.sorted()
     }
-    
+
     let networkingService = DefaultNetworkingService()
     
     private let fileManager = FileManager()
     private var cacheDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+    private var database: Connection?
+    private var tasksTable = Table("tasks")
+    let id = Expression<String>("id")
+    let text = Expression<String>("text")
+    let importance = Expression<String>("importance")
+    let deadline = Expression<TimeInterval?>("deadline")
+    let isDone = Expression<Bool>("done")
+    let createdAt = Expression<TimeInterval>("created_at")
+    let updatedAt = Expression<TimeInterval>("updated_at")
+    let isDirty = Expression<Bool>("dirty")
     
-    init(forFile: String) {
+    init(forFile: String, delegate: ViewController) {
+        self.delegate = delegate
         self.todoItems = [String: TodoItem]()
         self.fileName = forFile
+
+        createDataBase()
     }
-    
-    func toggleTaskDone(forID id: String) {
+
+    @discardableResult func toggleTaskDone(forID id: String) -> TodoItem? {
         todoItems[id]?.toggleDoneStatus()
+        return todoItems[id]
     }
     
-    func addNewTask(task: TodoItem) {
+    func addNewTask(_ task: TodoItem) {
         if todoItems.keys.contains(task.id) {
-            networkingService.updateTask(task) { _, response, error in
-                if error != nil, response == nil, !task.isDirty {
-                    self.todoItems[task.id]?.toggleDirtyState()
-                    return
-                }
-            }
+            updateTask(task, needToToggleDone: false)
         } else {
             networkingService.addTask(task) { _, response, error in
                 if error != nil, response == nil, !task.isDirty {
@@ -50,19 +61,40 @@ final class FileCache {
                     return
                 }
             }
+            addTaskToDatabase(task)
         }
-        
         todoItems[task.id] = task
     }
+
+    func updateTask(_ task: TodoItem, needToToggleDone: Bool) {
+        todoItems[task.id] = task
+        var newTask = task
+        if needToToggleDone {
+            toggleTaskDone(forID: task.id)
+            newTask.toggleDoneStatus()
+            newTask.updateDate()
+        }
+        print("\(task.isDone) -> \(newTask.isDone)")
+        networkingService.updateTask(newTask) { _, response, error in
+            if error != nil, response == nil, !task.isDirty {
+                self.todoItems[newTask.id]?.toggleDirtyState()
+                print("Error on update!")
+                return
+            }
+        }
+        updateTaskInDatabase(newTask)
+    }
     
-    func removeTask(withId id: String) {
-        todoItems.removeValue(forKey: id)
-        networkingService.deleteTask(withId: id, completion: { _, response, error in
+    func removeTask(withId idVal: String) {
+        todoItems.removeValue(forKey: idVal)
+        networkingService.deleteTask(withId: idVal, completion: { _, response, error in
             if error != nil, response == nil {
-                self.todoItems[id]?.toggleDirtyState()
+                self.todoItems[idVal]?.toggleDirtyState()
                 return
             }
         })
+
+        deleteTaskFromDatabase(atId: idVal)
     }
     
     func saveToFile() throws {
@@ -120,9 +152,9 @@ final class FileCache {
                 } catch {
                     throw FileCacheError.fileAccessError
                 }
+                syncWithServer()
             })
         }
-        syncWithServer()
     }
 
     private func syncWithServer() {
@@ -136,11 +168,17 @@ final class FileCache {
             let itemsRaw = try? JSONSerialization.jsonObject(with: data, options: []) as? [Any]
             guard let items = itemsRaw else { return }
             let remoteItems = items.compactMap { TodoItem.parseJSON(data: $0) }
+            print("On server: \(remoteItems)")
             let remoteIds = remoteItems.map { $0.id }
 
             for item in remoteItems {
                 if !self.todoItems.keys.contains(item.id) {
-                    self.addNewTask(task: item)
+                    self.addNewTask(item)
+                } else {
+                    let id = item.id
+                    if let task = self.todoItems[id], item.updatedAt > task.updatedAt {
+                        self.todoItems[id] = item
+                    }
                 }
             }
 
@@ -148,6 +186,13 @@ final class FileCache {
                 if !remoteIds.contains(id) {
                     self.removeTask(withId: id)
                 }
+            }
+
+            self.getTasksFromDatabase()
+
+            DispatchQueue.main.async {
+                self.delegate?.reloadTasksTableView()
+                self.delegate?.stopActivityIndicator()
             }
         }
     }
@@ -175,5 +220,104 @@ final class FileCache {
             throw FileCacheError.fileAccessError
         }
         return nil
+    }
+
+    // MARK: - Database
+
+    private func createDataBase() {
+        guard let dbDir = cacheDir?.appendingPathComponent("tasks.sqlite").path else { return }
+        var db: OpaquePointer?
+        guard sqlite3_open(dbDir, &db) == SQLITE_OK else {
+            print("error opening database")
+            sqlite3_close(db)
+            db = nil
+            return
+        }
+
+        do {
+            database = try Connection(dbDir)
+
+            try database?.run(tasksTable.create { table in
+                table.column(id, primaryKey: true)
+                table.column(text)
+                table.column(importance)
+                table.column(deadline)
+                table.column(isDone)
+                table.column(createdAt)
+                table.column(updatedAt)
+                table.column(isDirty)
+            })
+
+            print("\n\nDB created!\n\n")
+
+            for task in try database!.prepare(tasksTable) {
+                print("id: \(task[id]), text: \(task[text]), importance: \(task[importance])")
+            }
+
+        } catch {
+            print("Error with DB init")
+        }
+    }
+
+    private func getTasksFromDatabase() {
+
+    }
+
+    private func addTaskToDatabase(_ task: TodoItem) {
+        let idVal = task.json["id"] as? String ?? ""
+        let textVal = task.json["text"] as? String ?? ""
+        let importanceVal = task.json["importance"] as? String ?? ""
+        let deadlineVal = task.json["deadline"] as? TimeInterval ?? Date().timeIntervalSince1970
+        let isDoneVal = task.json["done"] as? Bool ?? false
+        let createdAtVal = task.json["created_at"] as? TimeInterval ?? Date().timeIntervalSince1970
+        let updatedAtVal = task.json["updated_at"] as? TimeInterval ?? Date().timeIntervalSince1970
+        let insert = tasksTable.insert(id <- idVal,
+                                       text <- textVal,
+                                       importance <- importanceVal,
+                                       deadline <- deadlineVal,
+                                       isDone <- isDoneVal,
+                                       createdAt <- createdAtVal,
+                                       updatedAt <- updatedAtVal,
+                                       isDirty <- false)
+        do {
+            let rowid = try database?.run(insert)
+            print("\n\(idVal) Inserted!\n")
+        } catch {
+            print("DB Insert error")
+        }
+    }
+
+    private func updateTaskInDatabase(_ task: TodoItem) {
+        let idVal = task.json["id"] as? String ?? ""
+        let textVal = task.json["text"] as? String ?? ""
+        let importanceVal = task.json["importance"] as? String ?? ""
+        let deadlineVal = task.json["deadline"] as? TimeInterval ?? Date().timeIntervalSince1970
+        let isDoneVal = task.json["done"] as? Bool ?? false
+        let createdAtVal = task.json["created_at"] as? TimeInterval ?? Date().timeIntervalSince1970
+        let updatedAtVal = task.json["updated_at"] as? TimeInterval ?? Date().timeIntervalSince1970
+        let update = tasksTable.update(id <- idVal,
+                                       text <- textVal,
+                                       importance <- importanceVal,
+                                       deadline <- deadlineVal,
+                                       isDone <- isDoneVal,
+                                       createdAt <- createdAtVal,
+                                       updatedAt <- updatedAtVal,
+                                       isDirty <- false)
+        do {
+            let rowid = try database?.run(update)
+            print("\n\(idVal) Inserted!\n")
+        } catch {
+            print("DB Insert error")
+        }
+    }
+
+    private func deleteTaskFromDatabase(atId idVal: String) {
+        let itemToDelete = tasksTable.filter(id == idVal)
+        do {
+            try database?.run(itemToDelete.delete())
+            print("\n\(idVal) Deleted\n")
+        } catch {
+            print("Error in DELETE")
+        }
     }
 }

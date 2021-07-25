@@ -1,13 +1,18 @@
 PODS:
   - PriorityEnum (0.0.1)
+  - SQLite.swift (0.12.2):
+    - SQLite.swift/standard (= 0.12.2)
+  - SQLite.swift/standard (0.12.2)
   - SwiftLint (0.43.1)
 
 DEPENDENCIES:
   - PriorityEnum (from `PriorityEnum/`)
+  - SQLite.swift (~> 0.12.0)
   - SwiftLint
 
 SPEC REPOS:
   trunk:
+    - SQLite.swift
     - SwiftLint
 
 EXTERNAL SOURCES:
@@ -16,8 +21,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   PriorityEnum: 6f939f2b13bc6ff37e9d1122b7aa777e41eaac0b
+  SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
   SwiftLint: 99f82d07b837b942dd563c668de129a03fc3fb52
 
-PODFILE CHECKSUM: d14748cf2093693513f78b447288ec0a68659ada
+PODFILE CHECKSUM: 0908180257c4423e020e97197bf9e9fc366aaca6
 
 COCOAPODS: 1.10.0

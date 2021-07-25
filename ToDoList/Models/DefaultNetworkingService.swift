@@ -85,6 +85,7 @@ class DefaultNetworkingService: NetworkingService {
             
             if let response = response, let data = data {
                 completion(data, response as? HTTPURLResponse, nil)
+                print("Updated! \(data)")
             }
             
             return

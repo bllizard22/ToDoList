@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="mj5-HG-pT5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="mj5-HG-pT5">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -255,7 +255,7 @@
                                 <color key="backgroundColor" name="Background"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="56" id="oaU-Au-X0v" customClass="TaskTableViewCell" customModule="ToDoList" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="382" height="56"/>
+                                        <rect key="frame" x="0.0" y="24.5" width="382" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oaU-Au-X0v" id="JEO-bQ-wNa">
                                             <rect key="frame" x="0.0" y="0.0" width="382" height="56"/>
@@ -285,6 +285,9 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Plus" translatesAutoresizingMaskIntoConstraints="NO" id="uzI-ad-QKp">
                                 <rect key="frame" x="185" y="802" width="44" height="44"/>
                             </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="eEe-cJ-4uB">
+                                <rect key="frame" x="185" y="114.5" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kEG-gK-p7W"/>
                         <color key="backgroundColor" name="Background"/>
@@ -301,15 +304,18 @@
                             <constraint firstItem="uzI-ad-QKp" firstAttribute="top" secondItem="Bgb-5W-hnc" secondAttribute="top" id="X07-1T-AQA"/>
                             <constraint firstItem="JAP-zO-cSN" firstAttribute="centerY" secondItem="ixt-wV-Rbx" secondAttribute="centerY" id="YDx-8M-GgM"/>
                             <constraint firstItem="kEG-gK-p7W" firstAttribute="trailing" secondItem="UBs-GG-IlM" secondAttribute="trailing" constant="16" id="bYZ-s4-Dxa"/>
+                            <constraint firstItem="eEe-cJ-4uB" firstAttribute="centerY" secondItem="NmA-rg-teD" secondAttribute="centerY" id="cXD-IN-kRG"/>
                             <constraint firstItem="kEG-gK-p7W" firstAttribute="trailing" secondItem="JAP-zO-cSN" secondAttribute="trailing" constant="32" id="cXb-7k-dc3"/>
                             <constraint firstItem="kEG-gK-p7W" firstAttribute="bottom" secondItem="Bgb-5W-hnc" secondAttribute="bottom" constant="16" id="dtl-tv-WxB"/>
                             <constraint firstItem="uzI-ad-QKp" firstAttribute="leading" secondItem="Bgb-5W-hnc" secondAttribute="leading" id="hRW-um-wSv"/>
                             <constraint firstItem="ixt-wV-Rbx" firstAttribute="top" secondItem="NmA-rg-teD" secondAttribute="bottom" constant="18" id="oiw-nP-XQi"/>
                             <constraint firstItem="JAP-zO-cSN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ixt-wV-Rbx" secondAttribute="trailing" constant="40" id="qM1-2R-HDD"/>
+                            <constraint firstItem="eEe-cJ-4uB" firstAttribute="leading" secondItem="NmA-rg-teD" secondAttribute="trailing" constant="16" id="vTV-Lf-C1H"/>
                             <constraint firstItem="kEG-gK-p7W" firstAttribute="bottom" secondItem="UBs-GG-IlM" secondAttribute="bottom" id="w7y-wu-SWT"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="eEe-cJ-4uB" id="pWb-wJ-k8O"/>
                         <outlet property="doneLabel" destination="ixt-wV-Rbx" id="GcW-d0-bkL"/>
                         <outlet property="showDoneButton" destination="JAP-zO-cSN" id="tUz-4f-rt5"/>
                         <outlet property="taskTableView" destination="UBs-GG-IlM" id="AKr-y8-Q9G"/>
