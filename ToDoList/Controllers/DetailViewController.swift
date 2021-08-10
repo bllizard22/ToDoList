@@ -13,6 +13,8 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     var fileCache: FileCache?
     var currentItem: TodoItem?
     var rootVC: ViewController?
+
+    var detailPresenter: DetailPresenter!
     
     var deadlinePicker: UIDatePicker!
     
@@ -30,6 +32,10 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        detailPresenter = DetailPresenter(controller: self,
+                                          fileCache: fileCache,
+                                          withTask: currentItem)
         
         setupVC()
         loadItem()
@@ -46,7 +52,6 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
-        rootVC = presentingViewController as? ViewController
         textView.delegate = self
         
         deleteButton.isEnabled = currentItem != nil
@@ -70,35 +75,17 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     }
 
     @IBAction private func saveTask(_ sender: UIBarButtonItem) {
-        let text = textView.text
-        
-        if let currentItem = currentItem {
-            let item = TodoItem(id: currentItem.id,
-                                text: textView.text,
-                                importance: Priority(rawValue: importanceSegmets.selectedSegmentIndex)!,
-                                deadline: deadlineSwitch.isOn ? deadlinePicker.date : nil,
-                                isDone: currentItem.isDone)
-            rootVC?.fileCache.updateTask(item, needToToggleDone: false)
-
-        } else {
-            let importance = Priority(rawValue: importanceSegmets.selectedSegmentIndex) ?? .moderate
-
-            let deadline = deadlineSwitch.isOn ? deadlinePicker.date : nil
-
-            let item: TodoItem = TodoItem(text: text ?? "",
-                                          importance: importance,
-                                          deadline: deadline)
-            rootVC?.fileCache.addNewTask(item)
-        }
-
-        closeDetailVC()
+        detailPresenter.saveTask(textRaw: textView.text,
+                                 importance: importanceSegmets.selectedSegmentIndex,
+                                 isDeadlineSwitchOn: deadlineSwitch.isOn,
+                                 date: deadlinePicker.date)
     }
     
     func textViewDidChange(_ textView: UITextView) {
         saveButton.isEnabled = textView.text != nil && textView.text != ""
     }
     
-    private func showDeadlinePicker() {
+    func showDeadlinePicker() {
         deadlinePicker = UIDatePicker()
         deadlinePicker.tag = 5
         if #available (iOS 14, *) {
@@ -118,15 +105,16 @@ class DetailViewController: UIViewController, UITextViewDelegate {
             showDeadlinePicker()
         } else {
             settingsViewHeightConstraint.constant -= deadlinePicker.frame.height + settingsStack.spacing
-            
+
             deadlinePicker.removeFromSuperview()
             settingsView.setNeedsLayout()
         }
+
     }
     
     @IBAction private func deleteTask(_ sender: UIButton) {
         guard let id = currentItem?.id else { return }
-        rootVC?.fileCache.removeTask(withId: id)
+        fileCache?.removeTask(withId: id)
         
         closeDetailVC()
     }
@@ -135,7 +123,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         view.endEditing(true)
     }
     
-    private func closeDetailVC() {
+    func closeDetailVC() {
         dismiss(animated: true) { [ weak self ] in
             self?.rootVC?.reloadTasksTableView()
         }
